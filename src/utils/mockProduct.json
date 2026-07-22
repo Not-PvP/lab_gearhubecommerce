@@ -1,0 +1,18 @@
+[
+  {
+    "id": "1",
+    "name": "Mechanical Keyboard",
+    "category": "Keyboard",
+    "price": 2999,
+    "image": "https://picsum.photos/300?1",
+    "inStock": true
+  },
+  {
+    "id": "2",
+    "name": "Wireless Mouse",
+    "category": "Mouse",
+    "price": 1499,
+    "image": "https://picsum.photos/300?2",
+    "inStock": true
+  }
+]

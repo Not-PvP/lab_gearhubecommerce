@@ -6,18 +6,20 @@ interface ProductCardProps {
 
 function ProductCard({ product }: ProductCardProps) {
   return (
-    <div>
+    <div className="product-card">
       <img src={product.image} alt={product.name} />
 
-      <h2>{product.name}</h2>
+      <div className="product-info">
+        <h2>{product.name}</h2>
 
-      <p>{product.category}</p>
+        <p>{product.category}</p>
 
-      <p>₱{product.price}</p>
+        <p>₱{product.price}</p>
 
-      <p>{product.inStock ? "In Stock" : "Out of Stock"}</p>
+        <p>{product.inStock ? "In Stock" : "Out of Stock"}</p>
 
-      <button>Add to Cart</button>
+        <button>Add to Cart</button>
+      </div>
     </div>
   );
 }

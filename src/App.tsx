@@ -1,10 +1,11 @@
-import products from "./utils/mockProduct.json";
-import ProductCard from "./components/ProductCard";
+import ProductGrid from "./components/ProductGrid";
 
 function App() {
   return (
     <div>
-      <ProductCard product={products[0]} />
+      <h1>GearHub</h1>
+
+      <ProductGrid />
     </div>
   );
 }

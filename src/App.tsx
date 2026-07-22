@@ -2,7 +2,7 @@ import ProductGrid from "./components/ProductGrid";
 
 function App() {
   return (
-    <div>
+    <div className="app">
       <h1>GearHub</h1>
 
       <ProductGrid />

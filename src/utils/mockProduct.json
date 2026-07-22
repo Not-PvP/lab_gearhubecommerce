@@ -4,7 +4,7 @@
     "name": "Mechanical Keyboard",
     "category": "Keyboard",
     "price": 2999,
-    "image": "https://picsum.photos/300?1",
+    "image": "/images/mechanicalKeyboard.jpg",
     "inStock": true
   },
   {
@@ -12,7 +12,7 @@
     "name": "Wireless Mouse",
     "category": "Mouse",
     "price": 1499,
-    "image": "https://picsum.photos/300?2",
+    "image": "/images/wirelessMouse.jpg",
     "inStock": true
   }
 ]

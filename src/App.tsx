@@ -1,10 +1,10 @@
 import ProductGrid from "./components/ProductGrid";
+import Navbar from "./components/Navbar/Navbar";
 
 function App() {
   return (
     <div className="app">
-      <h1>GearHub</h1>
-
+      <Navbar />
       <ProductGrid />
     </div>
   );

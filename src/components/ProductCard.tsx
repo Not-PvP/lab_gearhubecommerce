@@ -1,4 +1,5 @@
-import type { Product } from "../types";
+import type { Product } from "../types/types";
+import "../index.css";
 
 interface ProductCardProps {
   product: Product;
@@ -7,19 +8,23 @@ interface ProductCardProps {
 function ProductCard({ product }: ProductCardProps) {
   return (
     <div className="product-card">
-      <img src={product.image} alt={product.name} />
+      <img
+        className="product-card-image"
+        src={product.image}
+        alt={product.name}
+      />
 
-      <div className="product-info">
-        <h2>{product.name}</h2>
+      <h2 className="product-card-name">{product.name}</h2>
 
-        <p>{product.category}</p>
+      <p className="product-card-category">{product.category}</p>
 
-        <p>₱{product.price}</p>
+      <p className="product-card-price">₱{product.price}</p>
 
-        <p>{product.inStock ? "In Stock" : "Out of Stock"}</p>
+      <p className="product-card-stock">
+        {product.inStock ? "In Stock" : "Out of Stock"}
+      </p>
 
-        <button>Add to Cart</button>
-      </div>
+      <button className="product-card-button">Add to Cart</button>
     </div>
   );
 }

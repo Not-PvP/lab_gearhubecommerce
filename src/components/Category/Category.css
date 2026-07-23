@@ -1,0 +1,45 @@
+.category-pills {
+  max-width: 1200px;
+  margin: 16px auto 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 0 4px;
+}
+
+.category-pill {
+  border: 1.5px solid #111111;
+  background: #ffffff;
+  border-radius: 999px;
+  padding: 8px 20px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #111111;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
+}
+
+.category-pill:hover {
+  background: #f0f0f0;
+}
+
+.category-pill-active {
+  background: #111111;
+  color: #ffffff;
+}
+
+.category-pill-active:hover {
+  background: #222222;
+}
+
+@media (max-width: 720px) {
+  .category-pills {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+  .category-pill {
+    flex-shrink: 0;
+  }
+}

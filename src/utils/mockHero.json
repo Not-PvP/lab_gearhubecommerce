@@ -1,0 +1,20 @@
+[
+  {
+    "id": "slide-1",
+    "image": "/hero/hero1.png",
+    "headline": "New arrivals just dropped",
+    "subtext": "Check out the best camera in the world!"
+  },
+  {
+    "id": "slide-2",
+    "image": "/images/hero-2.jpg",
+    "headline": "Up to 30% off select laptops",
+    "subtext": "Limited time offer, while stocks last"
+  },
+  {
+    "id": "slide-3",
+    "image": "/images/hero-3.jpg",
+    "headline": "Build your dream setup",
+    "subtext": "Keyboards, mice, and monitors in one place"
+  }
+]

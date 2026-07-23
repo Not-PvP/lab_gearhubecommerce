@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import "./Category.css";
+import { useCard } from "../../state/CardContext";
 
-// matches the categories list from your wireframe notes
 const categories: string[] = [
   "Mouse",
   "Keyboard",
@@ -14,12 +14,14 @@ const categories: string[] = [
 ];
 
 const CategoryPills: React.FC = () => {
-  const [active, setActive] = useState<string | null>(null);
+  const { state, dispatch } = useCard();
+  const activeCategory = state.filters.category;
 
   const handleClick = (category: string) => {
-    // toggle off if clicking the same one again
-    setActive((prev) => (prev === category ? null : category));
-    // later: dispatch({ type: "SET_CATEGORY", payload: category })
+    dispatch({
+      type: "SET_CATEGORY",
+      payload: activeCategory === category ? "" : category,
+    });
   };
 
   return (
@@ -28,7 +30,7 @@ const CategoryPills: React.FC = () => {
         <button
           key={category}
           className={
-            active === category
+            activeCategory === category
               ? "category-pill category-pill-active"
               : "category-pill"
           }

@@ -1,8 +1,11 @@
 import React from "react";
 import "./Navbar.css";
-
+import { useCard } from "../../state/CardContext";
 
 const Navbar: React.FC = () => {
+  const { state, dispatch } = useCard();
+  const itemCount = state.cart.reduce((sum, item) => sum + item.quantity, 0);
+
   return (
     <nav className="navbar">
       <a className="navbar-logo" href="/" aria-label="GearHub home">
@@ -19,6 +22,8 @@ const Navbar: React.FC = () => {
           <input
             type="text"
             placeholder="Search for gears"
+            value={state.filters.searchQuery}
+            onChange={(e) => dispatch({ type: "SET_SEARCH_QUERY", payload: e.target.value })}
           />
         </div>
       </div>
@@ -28,9 +33,14 @@ const Navbar: React.FC = () => {
           <img src="/images/user.svg" alt="user" className="navbar-user-icon" />
         </button>
 
-        <button className="navbar-icon-btn">
+        <button
+          className="navbar-icon-btn"
+          onClick={() => dispatch({ type: "TOGGLE_CART" })}
+        >
           <img src="/images/cart.svg" alt="cart" className="navbar-cart-icon" />
-          <span className="navbar-cart-badge">3</span>
+          {itemCount > 0 && (
+            <span className="navbar-cart-badge">{itemCount}</span>
+          )}
         </button>
       </div>
     </nav>

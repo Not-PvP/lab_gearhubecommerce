@@ -2,14 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import { CardProvider } from './state/CardContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
+  <CardProvider>
     <App />
-  </React.StrictMode>
+  </CardProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

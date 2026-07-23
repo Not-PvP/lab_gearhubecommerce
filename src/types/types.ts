@@ -11,14 +11,16 @@ export interface CartItem extends Product {
   quantity: number;
 }
 
+export interface Filters {
+  searchQuery: string;
+  category: string;
+  maxPrice: number;
+  sortBy: "default" | "price-asc" | "price-desc";
+}
+
 export interface State {
   products: Product[];
   cart: CartItem[];
-  filters: {
-    searchQuery: string;
-    category: string;
-    maxPrice: number;
-    sortBy: "default" | "price-asc" | "price-desc";
-  };
+  filters: Filters;
   isCartOpen: boolean;
 }

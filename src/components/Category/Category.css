@@ -2,22 +2,25 @@
   max-width: 1200px;
   margin: 16px auto 0;
   display: flex;
-  flex-wrap: wrap;
   gap: 10px;
   padding: 0 4px;
 }
 
 .category-pill {
+  flex: 1;
   border: 1.5px solid #111111;
   background: #ffffff;
   border-radius: 999px;
-  padding: 8px 20px;
+  padding: 8px 12px;
   font-size: 13px;
   font-weight: 500;
   color: #111111;
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease;
   white-space: nowrap;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .category-pill:hover {
@@ -40,6 +43,7 @@
     padding-bottom: 4px;
   }
   .category-pill {
-    flex-shrink: 0;
+    flex: 0 0 auto;
+    padding: 8px 20px;
   }
 }

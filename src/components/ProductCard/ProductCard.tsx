@@ -1,7 +1,8 @@
+import { useCard } from "../../state/CardContext";
 import "./ProductCard.css";
 
 interface Product {
-  id: number | string;
+  id: string;
   name: string;
   category: string;
   price: number;
@@ -14,7 +15,12 @@ interface ProductCardProps {
 }
 
 function ProductCard({ product }: ProductCardProps) {
+  const { dispatch } = useCard();
   const { name, category, price, image, inStock } = product;
+
+  const handleAddToCart = () => {
+    dispatch({ type: "ADD_TO_CART", payload: product });
+  };
 
   return (
     <div className="product-card">
@@ -35,7 +41,11 @@ function ProductCard({ product }: ProductCardProps) {
         </p>
       </div>
 
-      <button className="product-card__button" disabled={!inStock}>
+      <button
+        className="product-card__button"
+        disabled={!inStock}
+        onClick={handleAddToCart}
+      >
         Add to Cart
       </button>
     </div>

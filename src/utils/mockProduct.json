@@ -4,7 +4,7 @@
     "name": "Mechanical Keyboard",
     "category": "Keyboard",
     "price": 2999,
-    "image": "/images/mechanicalKeyboard.jpg",
+    "image": "/product/mechanicalKeyboard.jpg",
     "inStock": true
   },
   {
@@ -12,7 +12,47 @@
     "name": "Wireless Mouse",
     "category": "Mouse",
     "price": 1499,
-    "image": "/images/wirelessMouse.jpg",
+    "image": "/product/wirelessMouse.jpg",
+    "inStock": true
+  },
+  {
+    "id": "3",
+    "name": "Asus TUF Gaming A15 Laptop",
+    "category": "Laptop",
+    "price": 50000,
+    "image": "/product/asusa15.jpg",
+    "inStock": true
+  },
+  {
+    "id": "4",
+    "name": "Razer Blackshark V2",
+    "category": "Headphones",
+    "price": 3000,
+    "image": "/product/razerblackshark.jpg",
+    "inStock": true
+  },
+  {
+    "id": "5",
+    "name": "Sony Alpha 7",
+    "category": "Cameras",
+    "price": 170000,
+    "image": "/product/sonyalpha7.webp",
+    "inStock": true
+  },
+  {
+    "id": "6",
+    "name": "Moza Racing KS Pro Steering Wheel",
+    "category": "Driving",
+    "price": 17000,
+    "image": "/product/mozaracingks.webp",
+    "inStock": true
+  },
+  {
+    "id": "7",
+    "name": "Xiaomi 2K Gaming Monitor G27Qi 2026",
+    "category": "Monitor",
+    "price": 12000,
+    "image": "/product/xiaomimonitor.webp",
     "inStock": true
   }
 ]

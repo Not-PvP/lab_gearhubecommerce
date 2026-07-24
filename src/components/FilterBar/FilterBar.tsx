@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./FilterBar.css";
+import { useCard } from "../../state/CardContext";
 
 const sortOptions = [
   { value: "default", label: "Popular" },
@@ -8,17 +9,18 @@ const sortOptions = [
 ];
 
 const FilterBar: React.FC = () => {
+  const { state, dispatch } = useCard();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isSortOpen, setIsSortOpen] = useState(false);
-  const [sortBy, setSortBy] = useState("default");
 
-  // placeholder local values — wire these to dispatch({ type: "SET_CATEGORY"/"SET_SORT" ... }) later
-  const [maxPrice, setMaxPrice] = useState(50000);
+  const sortBy = state.filters.sortBy;
 
   const handleSortSelect = (value: string) => {
-    setSortBy(value);
+    dispatch({
+      type: "SET_SORT",
+      payload: value as "default" | "price-asc" | "price-desc",
+    });
     setIsSortOpen(false);
-    // later: dispatch({ type: "SET_SORT", payload: value })
   };
 
   const currentSortLabel =
@@ -96,16 +98,20 @@ const FilterBar: React.FC = () => {
               min={0}
               max={200000}
               step={1000}
-              value={maxPrice}
-              onChange={(e) => setMaxPrice(Number(e.target.value))}
+              value={state.filters.maxPrice === Infinity ? 200000 : state.filters.maxPrice}
+              onChange={(e) =>
+                dispatch({ type: "SET_MAX_PRICE", payload: Number(e.target.value) })
+              }
             />
-            <p className="filter-panel-value">₱{maxPrice.toLocaleString()}</p>
+            <p className="filter-panel-value">
+              ₱{(state.filters.maxPrice === Infinity ? 200000 : state.filters.maxPrice).toLocaleString()}
+            </p>
           </div>
 
           <div className="filter-panel-actions">
             <button
               className="filter-panel-clear"
-              onClick={() => setMaxPrice(200000)}
+              onClick={() => dispatch({ type: "SET_MAX_PRICE", payload: Infinity })}
             >
               Clear
             </button>

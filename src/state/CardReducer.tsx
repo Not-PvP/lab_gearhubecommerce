@@ -24,7 +24,7 @@ export function cardReducer(state: State, action: Action): State {
           cart: state.cart.map((item) =>
             item.id === action.payload.id
               ? { ...item, quantity: item.quantity + 1 }
-              : item
+              : item,
           ),
         };
       }
@@ -55,7 +55,7 @@ export function cardReducer(state: State, action: Action): State {
       return {
         ...state,
         cart: state.cart.map((item) =>
-          item.id === id ? { ...item, quantity } : item
+          item.id === id ? { ...item, quantity } : item,
         ),
       };
     }
@@ -100,6 +100,17 @@ export function cardReducer(state: State, action: Action): State {
         ...state,
         isCartOpen:
           action.payload !== undefined ? action.payload : !state.isCartOpen,
+      };
+    }
+
+    case "TOGGLE_ITEM_SELECTED": {
+      return {
+        ...state,
+        cart: state.cart.map((item) =>
+          item.id === action.payload
+            ? { ...item, selected: !item.selected }
+            : item,
+        ),
       };
     }
 

@@ -1,16 +1,16 @@
 .navbar {
-  max-width: 1200px;
-  margin: 0 auto;
-  background: #ffffff;
-  border: 1.5px solid #111111;
-  border-radius: 16px;
-  padding: 14px 24px;
+  width: 100%;
+  background: #000000;
+  border-bottom: 1px solid #111;
+  padding: 20px 40px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
   display: flex;
   align-items: center;
   gap: 24px;
-  position: sticky;
-  top: 0px;
-  z-index: 100;
+  font-family: "Poppins", sans-serif;
 }
 
 .navbar-logo {
@@ -23,16 +23,9 @@
 }
 
 .navbar-logo-icon {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  border: 2px solid #111111;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 15px;
-  color: #e63946;
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
   flex-shrink: 0;
 }
 
@@ -43,12 +36,22 @@
 }
 
 .navbar-logo-title {
+  font-family: "Magz", sans-serif;
   font-size: 18px;
   font-weight: 700;
   color: #111111;
 }
 
+.title-gear {
+  color: #bf1b2c
+}
+
+.title-hub {
+  color: #fff
+}
+
 .navbar-logo-tagline {
+  font-family: "Poppins", sans-serif;
   font-size: 11px;
   color: #777777;
   font-weight: 400;
@@ -62,10 +65,27 @@
 .navbar-search-bar {
   display: flex;
   align-items: center;
-  border: 1.5px solid #111111;
-  border-radius: 999px;
-  padding: 8px 16px;
   gap: 10px;
+
+  padding: 8px 16px;
+
+  background: #171717;
+  border: 1px solid #2a2a2a;
+  border-radius: 999px;
+
+  transition: all 0.25s ease;
+  box-shadow: 0 0 8px rgba(191, 27, 44, 0.12);
+}
+
+.navbar-search-bar:hover {
+  border-color: #444;
+}
+
+.navbar-search-bar:focus-within {
+  border-color: #bf1b2c;
+  box-shadow:
+    0 0 12px rgba(191, 27, 44, 0.45),
+    0 0 24px rgba(191, 27, 44, 0.2);
 }
 
 .navbar-search-bar input {
@@ -73,20 +93,20 @@
   outline: none;
   flex: 1;
   font-size: 14px;
-  color: #111111;
+  font-family: "Poppins", sans-serif;
+  color: #fff;
   background: transparent;
-  font-family: inherit;
 }
 
 .navbar-search-bar input::placeholder {
   color: #999999;
+  font-family: "Poppins", sans-serif;
 }
 
 .navbar-search-icon {
-  width: 30px;
-  height: 30px;
+  width: 20px;
+  height: 20px;
   flex-shrink: 0;
-  color: #111111;
 }
 
 .navbar-actions {
@@ -100,25 +120,27 @@
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  border: 1.5px solid #111111;
-  background: #ffffff;
+  background: #1a1a1a;
   display: flex;
+  border: 1px solid transparent;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   position: relative;
-  transition: background 0.15s ease;
   padding: 0;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
 }
 
 .navbar-icon-btn:hover {
-  background: #f0f0f0;
+  background: #232323;
+  border-color: #bf1b2c;
+  transform: translateY(-1px);
 }
 
 .navbar-icon-btn svg {
   width: 19px;
   height: 19px;
-  color: #111111;
 }
 
 .navbar-cart-badge {

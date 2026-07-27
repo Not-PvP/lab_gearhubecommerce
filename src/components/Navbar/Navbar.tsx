@@ -9,9 +9,16 @@ const Navbar: React.FC = () => {
   return (
     <nav className="navbar">
       <a className="navbar-logo" href="/" aria-label="GearHub home">
-        <span className="navbar-logo-icon"></span>
+        <img 
+          src="/logo/gearhub-logo.svg"
+          alt="GearHub Logo"
+          className="navbar-logo-icon"
+        />
         <span className="navbar-logo-text-group">
-          <span className="navbar-logo-title">GearHub</span>
+          <span className="navbar-logo-title">
+            <span className="title-gear">Gear</span>
+            <span className="title-hub">Hub</span>
+          </span>
           <span className="navbar-logo-tagline">Gear Up. Level Up.</span>
         </span>
       </a>

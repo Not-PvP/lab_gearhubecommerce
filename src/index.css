@@ -1,4 +1,5 @@
 /* Global */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 * {
   margin: 0;
@@ -8,7 +9,12 @@
 
 body {
   font-family: Arial, sans-serif;
-  background-color: #f5f5f5;
+  background-color: #1a1a1a;
+}
+
+html,
+body {
+  overscroll-behavior: none;
 }
 
 /* App */
@@ -16,9 +22,14 @@ body {
 .app {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0 2rem 2rem;
 }
 
 .app h1 {
   margin-bottom: 2rem;
+}
+
+@font-face {
+  font-family: "Magz";
+  src: url("../public/fonts/Magz.otf") format("opentype");
 }

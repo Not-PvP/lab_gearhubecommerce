@@ -7,14 +7,17 @@ import ShoppingCart from "./components/ShoppingCart/ShoppingCart";
 
 function App() {
   return (
-    <div className="app">
+    <>
       <Navbar />
-      <Hero />
-      <Category />
-      <FilterBar />
-      <ProductGrid />
-      <ShoppingCart />
-    </div>
+
+      <div className="app">
+        <Hero />
+        <Category />
+        <FilterBar />
+        <ProductGrid />
+        <ShoppingCart />
+      </div>
+    </>
   );
 }
 

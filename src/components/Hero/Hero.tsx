@@ -25,7 +25,7 @@ const Hero: React.FC = () => {
   return (
     <section className="hero">
       <button className="hero-arrow hero-arrow-left" onClick={goPrev}>
-        {"<"}
+        <img src="/images/arrow-left.svg" alt="Previous slide" />
       </button>
 
       <div
@@ -39,7 +39,7 @@ const Hero: React.FC = () => {
       </div>
 
       <button className="hero-arrow hero-arrow-right" onClick={goNext}>
-        {">"}
+        <img src="/images/arrow-right.svg" alt="Next slide" />
       </button>
 
       <div className="hero-dots">

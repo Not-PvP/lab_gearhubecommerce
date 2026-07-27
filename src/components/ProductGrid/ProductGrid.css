@@ -1,5 +1,5 @@
 .product-grid {
-  max-width: 1320px;
+  width: 100%;
   margin: 16px auto 0;
   display: grid;
   grid-template-columns: repeat(5, 1fr);

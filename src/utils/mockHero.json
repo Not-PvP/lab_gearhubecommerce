@@ -2,19 +2,19 @@
   {
     "id": "slide-1",
     "image": "/hero/hero1.png",
-    "headline": "New arrivals just dropped",
-    "subtext": "Check out the best camera in the world!"
+    "headline": "Shoot Like a Pro",
+    "subtext": "Capture every detail with the Sony Alpha 7."
   },
   {
     "id": "slide-2",
-    "image": "/images/hero-2.jpg",
-    "headline": "Up to 30% off select laptops",
-    "subtext": "Limited time offer, while stocks last"
+    "image": "/hero/hero2.png",
+    "headline": "Game Without Limits",
+    "subtext": "Power up with the ASUS TUF A15."
   },
   {
     "id": "slide-3",
-    "image": "/images/hero-3.jpg",
-    "headline": "Build your dream setup",
-    "subtext": "Keyboards, mice, and monitors in one place"
+    "image": "/hero/hero3.png",
+    "headline": "Type. Play. Win.",
+    "subtext": "Level up your setup with the Atom MK890."
   }
 ]

@@ -137,8 +137,8 @@
 
 .navbar-icon-btn:hover {
   background: #232323;
-  border-color: #bf1b2c;
   transform: translateY(-1px);
+  border-color: #ef4444;
 }
 
 .navbar-icon-btn svg {

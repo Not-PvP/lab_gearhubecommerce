@@ -1,10 +1,9 @@
 .filter-bar {
-  max-width: 1200px;
+  width: 100%;
   margin: 16px auto 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: 1.5px solid #111111;
   border-radius: 12px;
   padding: 10px 16px;
   position: relative;

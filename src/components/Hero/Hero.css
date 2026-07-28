@@ -50,18 +50,6 @@
   transition: 
     transform .3s ease,
     box-shadow .3s ease;
-  animation: heroCardFade .45s ease;
-}
-
-@keyframes heroCardFade {
-    from {
-        opacity: 0;
-        transform: translateY(8px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }
 
 .hero-slide:hover .hero-slide-content {

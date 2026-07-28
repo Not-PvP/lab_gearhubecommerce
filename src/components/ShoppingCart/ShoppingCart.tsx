@@ -36,7 +36,7 @@ function ShoppingCart() {
       />
       <aside className={`cart-drawer ${isCartOpen ? "cart-drawer--open" : ""}`}>
         <div className="cart-drawer__header">
-          <h2 className="cart-drawer__title">Your Cart ({itemCount})</h2>
+          <h2 className="cart-drawer__title">Your Loadout ({itemCount})</h2>
           <button className="cart-drawer__close" onClick={onClose}>
             ✕
           </button>
@@ -45,7 +45,20 @@ function ShoppingCart() {
         <div className="cart-drawer__items">
           {cart.length === 0 ? (
             <div className="cart-drawer__empty">
-              <p>Your cart is empty.</p>
+               <img
+                  src="/images/cart-empty.svg"
+                  alt="Empty shopping cart"
+                  className="cart-drawer__empty-icon"
+                />
+
+                <h3 className="cart-drawer__empty-title">
+                  Your cart is empty
+                </h3>
+
+                <p className="cart-drawer__empty-text">
+                  Time to level up.
+                </p>
+
               <button className="cart-drawer__continue" onClick={onClose}>
                 Continue Shopping
               </button>

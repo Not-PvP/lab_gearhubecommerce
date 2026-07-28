@@ -26,28 +26,20 @@ const FilterBar: React.FC = () => {
   const currentSortLabel =
     sortOptions.find((opt) => opt.value === sortBy)?.label ?? "Popular";
 
+  const sliderValue =
+  state.filters.maxPrice === Infinity
+    ? 200000
+    : state.filters.maxPrice;
+
+  const progress = (sliderValue / 200000) * 100;
+
   return (
     <div className="filter-bar">
       <button
         className="filter-button"
         onClick={() => setIsFilterOpen((prev) => !prev)}
       >
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={2}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
-        >
-          <line x1="4" y1="6" x2="20" y2="6" />
-          <line x1="4" y1="12" x2="20" y2="12" />
-          <line x1="4" y1="18" x2="20" y2="18" />
-          <circle cx="8" cy="6" r="2" fill="currentColor" stroke="none" />
-          <circle cx="16" cy="12" r="2" fill="currentColor" stroke="none" />
-          <circle cx="10" cy="18" r="2" fill="currentColor" stroke="none" />
-        </svg>
+        <img src="/images/filter.svg" alt="" aria-hidden="true" />
         Filter
       </button>
 
@@ -57,17 +49,12 @@ const FilterBar: React.FC = () => {
           onClick={() => setIsSortOpen((prev) => !prev)}
         >
           Sort: {currentSortLabel}
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2}
-            strokeLinecap="round"
-            strokeLinejoin="round"
+          <img
+            src="/images/arrow-down.svg"
+            alt=""
             aria-hidden="true"
-          >
-            <polyline points="6 9 12 15 18 9" />
-          </svg>
+            className={`sort-icon ${isSortOpen ? "open" : ""}`}
+          />
         </button>
 
         {isSortOpen && (
@@ -98,9 +85,17 @@ const FilterBar: React.FC = () => {
               min={0}
               max={200000}
               step={1000}
-              value={state.filters.maxPrice === Infinity ? 200000 : state.filters.maxPrice}
+              value={sliderValue}
               onChange={(e) =>
-                dispatch({ type: "SET_MAX_PRICE", payload: Number(e.target.value) })
+                dispatch({
+                  type: "SET_MAX_PRICE",
+                  payload: Number(e.target.value),
+                })
+              }
+              style={
+                {
+                  "--progress": `${progress}%`,
+                } as React.CSSProperties
               }
             />
             <p className="filter-panel-value">

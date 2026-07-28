@@ -108,13 +108,13 @@ const FilterBar: React.FC = () => {
               className="filter-panel-clear"
               onClick={() => dispatch({ type: "SET_MAX_PRICE", payload: Infinity })}
             >
-              Clear
+              Reset
             </button>
             <button
               className="filter-panel-apply"
               onClick={() => setIsFilterOpen(false)}
             >
-              Apply
+              Done
             </button>
           </div>
         </div>

@@ -19,7 +19,7 @@
     "id": "3",
     "name": "Asus TUF Gaming A15 Laptop",
     "category": "Laptop",
-    "price": 50000,
+    "price": 54999,
     "image": "/product/asusa15.png",
     "inStock": true
   },
@@ -27,7 +27,7 @@
     "id": "4",
     "name": "Beats Studio Pro Wireless Headphones",
     "category": "Headphones",
-    "price": 3000,
+    "price": 18990,
     "image": "/product/beatsstudiopro.png",
     "inStock": true
   },
@@ -35,7 +35,7 @@
     "id": "5",
     "name": "Sony Alpha 7",
     "category": "Cameras",
-    "price": 170000,
+    "price": 129999,
     "image": "/product/sonyalpha7.png",
     "inStock": true
   },
@@ -43,7 +43,7 @@
     "id": "6",
     "name": "Moza Racing KS Pro Steering Wheel",
     "category": "Driving",
-    "price": 17000,
+    "price": 17999,
     "image": "/product/mozaracing.png",
     "inStock": true
   },
@@ -51,7 +51,143 @@
     "id": "7",
     "name": "Xiaomi 2K Gaming Monitor G27Qi 2026",
     "category": "Monitor",
-    "price": 12000,
+    "price": 10999,
+    "image": "/product/xiaomi2k.png",
+    "inStock": true
+  },
+  {
+    "id": "8",
+    "name": "Nvidia GeForce RTX 5090",
+    "category": "Components",
+    "price": 249999,
+    "image": "/product/xiaomi2k.png",
+    "inStock": true
+  },
+  {
+    "id": "9",
+    "name": "32GB DDR5-6000 CL30",
+    "category": "Components",
+    "price": 9999,
+    "image": "/product/xiaomi2k.png",
+    "inStock": true
+  },
+  {
+    "id": "10",
+    "name": "Logitech G Pro X Superlight Wireless Gaming Mouse",
+    "category": "Mouse",
+    "price": 7999,
+    "image": "/product/xiaomi2k.png",
+    "inStock": true
+  },
+  {
+    "id": "11",
+    "name": "Pulsar TenZ Signature Edition Wireless Gaming Mouse",
+    "category": "Mouse",
+    "price": 7999,
+    "image": "/product/xiaomi2k.png",
+    "inStock": true
+  },
+  {
+    "id": "12",
+    "name": "MCHOSE X75 Wireless Mechanical Keyboard",
+    "category": "Keyboard",
+    "price": 3499,
+    "image": "/product/xiaomi2k.png",
+    "inStock": true
+  },
+  {
+    "id": "13",
+    "name": "Aula F75 RGB Tri-Mode Mechanical Keyboard",
+    "category": "Keyboard",
+    "price": 2499,
+    "image": "/product/xiaomi2k.png",
+    "inStock": true
+  },
+  {
+    "id": "14",
+    "name": "Lenovo Legion 5 Laptop",
+    "category": "Laptop",
+    "price": 79999,
+    "image": "/product/xiaomi2k.png",
+    "inStock": true
+  },
+  {
+    "id": "15",
+    "name": "Lenovo Legion LOQ",
+    "category": "Laptop",
+    "price": 54999,
+    "image": "/product/xiaomi2k.png",
+    "inStock": true
+  },
+  {
+    "id": "16",
+    "name": "Razer Blackshark V2",
+    "category": "Headphones",
+    "price": 7499,
+    "image": "/product/xiaomi2k.png",
+    "inStock": true
+  },
+  {
+    "id": "17",
+    "name": "Onikuma GT808",
+    "category": "Headphones",
+    "price": 1299,
+    "image": "/product/xiaomi2k.png",
+    "inStock": true
+  },
+  {
+    "id": "18",
+    "name": "Logitech C922x Webcam",
+    "category": "Cameras",
+    "price": 4999,
+    "image": "/product/xiaomi2k.png",
+    "inStock": true
+  },
+  {
+    "id": "19",
+    "name": "Insta360 Link 2 Pro",
+    "category": "Cameras",
+    "price": 14999,
+    "image": "/product/xiaomi2k.png",
+    "inStock": true
+  },
+  {
+    "id": "20",
+    "name": "Logitech G Driving Force Shifter",
+    "category": "Driving",
+    "price": 2999,
+    "image": "/product/xiaomi2k.png",
+    "inStock": true
+  },
+  {
+    "id": "21",
+    "name": "MOZA SR-P Pedals",
+    "category": "Driving",
+    "price": 7999,
+    "image": "/product/xiaomi2k.png",
+    "inStock": true
+  },
+  {
+    "id": "22",
+    "name": "ASUS ROG Swift OLED PG32UCDM 4K Monitor",
+    "category": "Monitor",
+    "price": 74999,
+    "image": "/product/xiaomi2k.png",
+    "inStock": true
+  },
+  {
+    "id": "23",
+    "name": "AOC U27G4/71 4K 160Hz Monitor",
+    "category": "Monitor",
+    "price": 15999,
+    "image": "/product/xiaomi2k.png",
+    "inStock": true
+  },
+  {
+    "id": "24",
+    "name": "Lian Li Lancool 217 PC Case",
+    "category": "Components",
+    "price": 6999,
     "image": "/product/xiaomi2k.png",
     "inStock": true
   }

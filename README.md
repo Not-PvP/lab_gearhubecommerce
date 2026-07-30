@@ -40,6 +40,7 @@ interface Product {
 
 interface CartItem extends Product {
   quantity: number;
+  selected: boolean;
 }
 
 interface State {

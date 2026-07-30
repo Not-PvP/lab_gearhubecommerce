@@ -83,7 +83,7 @@ const FilterBar: React.FC = () => {
             <input
               type="range"
               min={0}
-              max={200000}
+              max={250000}
               step={1000}
               value={sliderValue}
               onChange={(e) =>

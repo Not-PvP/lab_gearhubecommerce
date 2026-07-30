@@ -9,6 +9,7 @@ export interface Product {
 
 export interface CartItem extends Product {
   quantity: number;
+  selected: boolean;
 }
 
 export interface Filters {
@@ -23,4 +24,9 @@ export interface State {
   cart: CartItem[];
   filters: Filters;
   isCartOpen: boolean;
+}
+
+export interface CartItem extends Product {
+  quantity: number;
+  selected: boolean;
 }

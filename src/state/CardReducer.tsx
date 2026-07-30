@@ -31,7 +31,7 @@ export function cardReducer(state: State, action: Action): State {
 
       return {
         ...state,
-        cart: [...state.cart, { ...action.payload, quantity: 1 }],
+        cart: [...state.cart, { ...action.payload, quantity: 1, selected: true }],
       };
     }
 

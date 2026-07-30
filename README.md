@@ -1,46 +1,118 @@
-# Getting Started with Create React App
+# GearHub — Mini E-Commerce
+
+A single-page React app for browsing tech accessories, filtering/sorting products, managing a cart, and running a simulated checkout. All state is managed with React's `useReducer` + `createContext` (no external state library).
+
+## Team
+
+- Mark Angelo L. Florencio
+- Niño Kriebel C. Olmo
+
+## Features
+
+- **Product Browsing & Filtering**
+  - Product grid rendered from static/mock JSON data
+  - Filter by category, max price, and search query
+  - Sort by price (low→high, high→low) or by title
+- **Global Cart Management**
+  - Slide-out cart drawer overlay
+  - Add / remove items, adjust quantity with +/-
+  - Real-time subtotal and grand total calculation
+- **UX Details**
+  - Cart icon badge shows total item count (sums quantities, not just line items)
+
+## Tech Stack
+
+- React
+- `useReducer` + `createContext` for global state (products, cart, filters, cart-open state)
+- Create React App (CRA) tooling
+
+## State Shape
+
+```ts
+interface Product {
+  id: string;
+  name: string;
+  category: string;
+  price: number;
+  image: string;
+  inStock: boolean;
+}
+
+interface CartItem extends Product {
+  quantity: number;
+}
+
+interface State {
+  products: Product[];
+  cart: CartItem[];
+  filters: {
+    searchQuery: string;
+    category: string;
+    maxPrice: number;
+    sortBy: 'default' | 'price-asc' | 'price-desc';
+  };
+  isCartOpen: boolean;
+}
+```
+
+## Actions
+
+| Action Type | Payload | Description |
+|---|---|---|
+| `ADD_TO_CART` | `Product` | Adds item to cart or increments quantity if already present |
+| `REMOVE_FROM_CART` | `string` (id) | Removes line item completely from cart |
+| `UPDATE_QUANTITY` | `{ id: string; quantity: number }` | Sets specific quantity (removes item if quantity reaches 0) |
+| `CLEAR_CART` | `undefined` | Empties the cart array and resets promo code |
+| `SET_SEARCH_QUERY` | `string` | Updates search term filter |
+| `SET_CATEGORY` | `string` | Filters products by selected category |
+| `SET_SORT` | `string` | Updates sorting strategy |
+| `TOGGLE_CART` | `boolean` (optional) | Opens or closes the cart drawer |
+
+## Getting Started
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+### 1. Clone the repo
 
-In the project directory, you can run:
+```bash
+git clone https://github.com/Not-PvP/lab_gearhubecommerce.git gearhub
+cd gearhub
+```
 
-### `npm start`
+### 2. Install dependencies
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```bash
+npm install
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### 3. Run the app
 
-### `npm test`
+```bash
+npm start
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Runs the app in development mode. Open [http://localhost:3000](http://localhost:3000) to view it in the browser. The page reloads automatically on edits.
 
-### `npm run build`
+### 4. Run tests (optional)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+npm test
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 5. Build for production (optional)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+npm run build
+```
 
-### `npm run eject`
+Bundles the app into the `build/` folder, minified and optimized for deployment.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Known Limitations
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- Checkout is simulated only, no real payment processing.
+- Product data such as stocks is static/mock, no live backend.
 
 ## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started)
+- [React documentation](https://reactjs.org/)

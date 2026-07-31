@@ -7,6 +7,7 @@
 - Mark Angelo L. Florencio
 - Niño Kriebel C. Olmo
 
+## GEARHUB - Mini E-commerce
 ## Features
 
 - **Product Browsing & Filtering**

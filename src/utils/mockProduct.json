@@ -60,15 +60,15 @@
     "name": "Nvidia GeForce RTX 5090",
     "category": "Components",
     "price": 249999,
-    "image": "/product/xiaomi2k.png",
+    "image": "/product/nvidiartx5090.png",
     "inStock": true
   },
   {
     "id": "9",
-    "name": "32GB DDR5-6000 CL30",
+    "name": "Corsair Vengeance 32GB DDR5-6000 CL30",
     "category": "Components",
     "price": 9999,
-    "image": "/product/xiaomi2k.png",
+    "image": "/product/corsairvengeance.png",
     "inStock": true
   },
   {
@@ -76,7 +76,7 @@
     "name": "Logitech G Pro X Superlight Wireless Gaming Mouse",
     "category": "Mouse",
     "price": 7999,
-    "image": "/product/xiaomi2k.png",
+    "image": "/product/logitechsuperlight.png",
     "inStock": true
   },
   {
@@ -84,7 +84,7 @@
     "name": "Pulsar TenZ Signature Edition Wireless Gaming Mouse",
     "category": "Mouse",
     "price": 7999,
-    "image": "/product/xiaomi2k.png",
+    "image": "/product/pulsartenz.png",
     "inStock": true
   },
   {
@@ -92,7 +92,7 @@
     "name": "MCHOSE X75 Wireless Mechanical Keyboard",
     "category": "Keyboard",
     "price": 3499,
-    "image": "/product/xiaomi2k.png",
+    "image": "/product/mchosex75.png",
     "inStock": true
   },
   {
@@ -100,7 +100,7 @@
     "name": "Aula F75 RGB Tri-Mode Mechanical Keyboard",
     "category": "Keyboard",
     "price": 2499,
-    "image": "/product/xiaomi2k.png",
+    "image": "/product/aulaf75.png",
     "inStock": true
   },
   {
@@ -108,7 +108,7 @@
     "name": "Lenovo Legion 5 Laptop",
     "category": "Laptop",
     "price": 79999,
-    "image": "/product/xiaomi2k.png",
+    "image": "/product/lenovolegion5.png",
     "inStock": true
   },
   {
@@ -116,7 +116,7 @@
     "name": "Lenovo Legion LOQ",
     "category": "Laptop",
     "price": 54999,
-    "image": "/product/xiaomi2k.png",
+    "image": "/product/lenovoloq.png",
     "inStock": true
   },
   {
@@ -124,7 +124,7 @@
     "name": "Razer Blackshark V2",
     "category": "Headphones",
     "price": 7499,
-    "image": "/product/xiaomi2k.png",
+    "image": "/product/razerblackshark.png",
     "inStock": true
   },
   {
@@ -132,7 +132,7 @@
     "name": "Onikuma GT808",
     "category": "Headphones",
     "price": 1299,
-    "image": "/product/xiaomi2k.png",
+    "image": "/product/onikumagt808.png",
     "inStock": true
   },
   {
@@ -140,55 +140,7 @@
     "name": "Logitech C922x Webcam",
     "category": "Cameras",
     "price": 4999,
-    "image": "/product/xiaomi2k.png",
-    "inStock": true
-  },
-  {
-    "id": "19",
-    "name": "Insta360 Link 2 Pro",
-    "category": "Cameras",
-    "price": 14999,
-    "image": "/product/xiaomi2k.png",
-    "inStock": true
-  },
-  {
-    "id": "20",
-    "name": "Logitech G Driving Force Shifter",
-    "category": "Driving",
-    "price": 2999,
-    "image": "/product/xiaomi2k.png",
-    "inStock": true
-  },
-  {
-    "id": "21",
-    "name": "MOZA SR-P Pedals",
-    "category": "Driving",
-    "price": 7999,
-    "image": "/product/xiaomi2k.png",
-    "inStock": true
-  },
-  {
-    "id": "22",
-    "name": "ASUS ROG Swift OLED PG32UCDM 4K Monitor",
-    "category": "Monitor",
-    "price": 74999,
-    "image": "/product/xiaomi2k.png",
-    "inStock": true
-  },
-  {
-    "id": "23",
-    "name": "AOC U27G4/71 4K 160Hz Monitor",
-    "category": "Monitor",
-    "price": 15999,
-    "image": "/product/xiaomi2k.png",
-    "inStock": true
-  },
-  {
-    "id": "24",
-    "name": "Lian Li Lancool 217 PC Case",
-    "category": "Components",
-    "price": 6999,
-    "image": "/product/xiaomi2k.png",
+    "image": "/product/logitechc922x.png",
     "inStock": true
   }
 ]

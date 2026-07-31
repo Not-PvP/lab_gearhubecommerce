@@ -3,7 +3,7 @@ import "./FilterBar.css";
 import { useCard } from "../../state/CardContext";
 
 const sortOptions = [
-  { value: "default", label: "Popular" },
+  { value: "default", label: "Default" },
   { value: "price-asc", label: "Price: low to high" },
   { value: "price-desc", label: "Price: high to low" },
 ];

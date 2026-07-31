@@ -1,8 +1,8 @@
-# GearHub — Mini E-Commerce
+# GitHub Repository
 
-A single-page React app for browsing tech accessories, filtering/sorting products, managing a cart, and running a simulated checkout. All state is managed with React's `useReducer` + `createContext` (no external state library).
+- GitHub Link: https://github.com/Not-PvP/lab_gearhubecommerce
 
-## Team
+## Team Members
 
 - Mark Angelo L. Florencio
 - Niño Kriebel C. Olmo
@@ -24,7 +24,7 @@ A single-page React app for browsing tech accessories, filtering/sorting product
 
 - React
 - `useReducer` + `createContext` for global state (products, cart, filters, cart-open state)
-- Create React App (CRA) tooling
+- Create React App
 
 ## State Shape
 
@@ -70,9 +70,6 @@ interface State {
 | `TOGGLE_CART` | `boolean` (optional) | Opens or closes the cart drawer |
 
 ## Getting Started
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
 ### 1. Clone the repo
 
 ```bash
@@ -92,7 +89,7 @@ npm install
 npm start
 ```
 
-Runs the app in development mode. Open [http://localhost:3000](http://localhost:3000) to view it in the browser. The page reloads automatically on edits.
+Runs the app in development mode. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ### 4. Run tests (optional)
 
@@ -112,8 +109,3 @@ Bundles the app into the `build/` folder, minified and optimized for deployment.
 
 - Checkout is simulated only, no real payment processing.
 - Product data such as stocks is static/mock, no live backend.
-
-## Learn More
-
-- [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started)
-- [React documentation](https://reactjs.org/)

@@ -28,10 +28,10 @@ const FilterBar: React.FC = () => {
 
   const sliderValue =
   state.filters.maxPrice === Infinity
-    ? 200000
+    ? 250000
     : state.filters.maxPrice;
 
-  const progress = (sliderValue / 200000) * 100;
+  const progress = (sliderValue / 250000) * 100;
 
   return (
     <div className="filter-bar">
@@ -99,7 +99,7 @@ const FilterBar: React.FC = () => {
               }
             />
             <p className="filter-panel-value">
-              ₱{(state.filters.maxPrice === Infinity ? 200000 : state.filters.maxPrice).toLocaleString()}
+              ₱{(state.filters.maxPrice === Infinity ? 250000 : state.filters.maxPrice).toLocaleString()}
             </p>
           </div>
 

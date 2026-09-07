@@ -27,6 +27,9 @@ function ShoppingCart() {
     dispatch({ type: "REMOVE_FROM_CART", payload: id });
   const onToggleSelected = (id: string) =>
     dispatch({ type: "TOGGLE_ITEM_SELECTED", payload: id });
+  const onCheckout = () => dispatch({ type: "TOGGLE_CHECKOUT", payload: true });
+
+  const hasSelectedItems = cart.some((item) => item.selected);
 
   return (
     <>
@@ -119,7 +122,13 @@ function ShoppingCart() {
               <span>Total</span>
               <span>₱{total.toLocaleString()}</span>
             </div>
-            <button className="cart-drawer__checkout">Checkout</button>
+            <button
+              className="cart-drawer__checkout"
+              onClick={onCheckout}
+              disabled={!hasSelectedItems}
+            >
+              Checkout
+            </button>
           </div>
         )}
       </aside>

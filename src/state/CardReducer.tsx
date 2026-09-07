@@ -1,9 +1,12 @@
-import { State } from "../types/types";
+import { State, Order, OrderItem } from "../types/types";
 import { Action } from "./actions";
+
+const SHIPPING_FEE = 150;
 
 export const initialState: State = {
   products: [],
   cart: [],
+  orders: [],
   filters: {
     searchQuery: "",
     category: "",
@@ -11,6 +14,7 @@ export const initialState: State = {
     sortBy: "default",
   },
   isCartOpen: false,
+  isCheckoutOpen: false,
 };
 
 export function cardReducer(state: State, action: Action): State {
@@ -103,6 +107,55 @@ export function cardReducer(state: State, action: Action): State {
       };
     }
 
+    case "TOGGLE_CHECKOUT": {
+      return {
+        ...state,
+        isCheckoutOpen:
+          action.payload !== undefined ? action.payload : !state.isCheckoutOpen,
+      };
+    }
+
+    case "PLACE_ORDER": {
+      const selectedItems = state.cart.filter((item) => item.selected);
+      if (selectedItems.length === 0) {
+        return state;
+      }
+
+      const orderItems: OrderItem[] = selectedItems.map((item) => ({
+        id: item.id,
+        name: item.name,
+        image: item.image,
+        unitPrice: item.price,
+        quantity: item.quantity,
+      }));
+
+      const subtotal = orderItems.reduce(
+        (sum, item) => sum + item.unitPrice * item.quantity,
+        0,
+      );
+      const shipping = subtotal > 0 ? SHIPPING_FEE : 0;
+
+      const newOrder: Order = {
+        id: action.payload.id,
+        items: orderItems,
+        subtotal,
+        shipping,
+        total: subtotal + shipping,
+        shippingAddress: action.payload.shippingAddress,
+        paymentMethod: action.payload.paymentMethod,
+        status: "PENDING",
+        createdAt: new Date().toISOString(),
+      };
+
+      return {
+        ...state,
+        orders: [...state.orders, newOrder],
+        cart: state.cart.filter((item) => !item.selected),
+        isCheckoutOpen: false,
+        isCartOpen: false,
+      };
+    }
+
     case "TOGGLE_ITEM_SELECTED": {
       return {
         ...state,
@@ -118,4 +171,3 @@ export function cardReducer(state: State, action: Action): State {
       return state;
   }
 }
-

@@ -1,4 +1,4 @@
-import { Product } from "../types/types";
+import { Product, ShippingAddress, PaymentMethod } from "../types/types";
 
 export type Action =
   | { type: "ADD_TO_CART"; payload: Product }
@@ -10,4 +10,13 @@ export type Action =
   | { type: "SET_MAX_PRICE"; payload: number }
   | { type: "SET_SORT"; payload: "default" | "price-asc" | "price-desc" }
   | { type: "TOGGLE_CART"; payload?: boolean }
-  | { type: "TOGGLE_ITEM_SELECTED"; payload: string };
+  | { type: "TOGGLE_ITEM_SELECTED"; payload: string }
+  | { type: "TOGGLE_CHECKOUT"; payload?: boolean }
+  | {
+      type: "PLACE_ORDER";
+      payload: {
+        id: string;
+        shippingAddress: ShippingAddress;
+        paymentMethod: PaymentMethod;
+      };
+    };

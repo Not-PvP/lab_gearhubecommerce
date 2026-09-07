@@ -4,6 +4,7 @@ import Hero from "./components/Hero/Hero";
 import Category from "./components/Category/Category";
 import FilterBar from "./components/FilterBar/FilterBar";
 import ShoppingCart from "./components/ShoppingCart/ShoppingCart";
+import Checkout from "./components/Checkout/Checkout";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <FilterBar />
         <ProductGrid />
         <ShoppingCart />
+        <Checkout />
       </div>
     </>
   );

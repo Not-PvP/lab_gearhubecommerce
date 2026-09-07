@@ -309,3 +309,11 @@
   cursor: pointer;
   flex-shrink: 0;
 }
+
+.cart-drawer__checkout:disabled {
+  background: #3a3a3a;
+  color: #8f8f8f;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}

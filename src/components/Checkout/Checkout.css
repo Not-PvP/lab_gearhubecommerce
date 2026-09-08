@@ -235,3 +235,46 @@
 .checkout-modal .checkout-modal__submit {
   margin-top: 18px;
 }
+
+.checkout-confirmation__icon--muted {
+  background: #2a2a2a;
+  color: #a3a3a3;
+}
+
+.checkout-confirmation__icon--error {
+  background: #321616;
+  color: #ff6b6b;
+}
+
+.checkout-confirmation__spinner {
+  width: 40px;
+  height: 40px;
+  margin: 0 0 12px;
+  border-radius: 50%;
+  border: 3px solid #2a2a2a;
+  border-top-color: #bf1b2c;
+  animation: checkout-spin 0.8s linear infinite;
+}
+
+@keyframes checkout-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.checkout-modal__secondary {
+  margin-top: 18px;
+  padding: 10px 20px;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  background: transparent;
+  color: #a3a3a3;
+  font-size: 13px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.checkout-modal__secondary:hover {
+  border-color: #bf1b2c;
+  color: #fff;
+}

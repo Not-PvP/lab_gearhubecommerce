@@ -15,6 +15,7 @@ export const initialState: State = {
   },
   isCartOpen: false,
   isCheckoutOpen: false,
+  isOrderHistoryOpen: false,
 };
 
 export function cardReducer(state: State, action: Action): State {
@@ -115,6 +116,14 @@ export function cardReducer(state: State, action: Action): State {
         ...state,
         isCheckoutOpen:
           action.payload !== undefined ? action.payload : !state.isCheckoutOpen,
+      };
+    }
+
+    case "TOGGLE_ORDER_HISTORY": {
+      return {
+        ...state,
+        isOrderHistoryOpen:
+          action.payload !== undefined ? action.payload : !state.isOrderHistoryOpen,
       };
     }
 

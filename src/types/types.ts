@@ -64,4 +64,5 @@ export interface State {
   filters: Filters;
   isCartOpen: boolean;
   isCheckoutOpen: boolean;
+  isOrderHistoryOpen: boolean;
 }

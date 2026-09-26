@@ -4,7 +4,7 @@ export interface Product {
   category: string;
   price: number;
   image: string;
-  inStock: boolean;
+  stock: number;
 }
 
 export interface CartItem extends Product {

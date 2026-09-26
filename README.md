@@ -1,112 +1,278 @@
-# GitHub Repository
+# E-Commerce & Logistics Backend REST API
 
-- GitHub Link: https://github.com/Not-PvP/lab_gearhubecommerce
+A RESTful backend API developed using **Node.js, TypeScript, Express, and PostgreSQL**. This project implements CRUD operations for customers, products, orders, order items, vendors, and supplies using raw SQL queries through the `pg` library.
 
-## Team Members
+## Technologies Used
 
-- Mark Angelo L. Florencio
-- Niño Kriebel C. Olmo
+* Node.js
+* TypeScript
+* Express.js
+* PostgreSQL
+* node-postgres (`pg`)
+* dotenv
 
-## GEARHUB - Mini E-commerce
-## Features
+## Project Structure
 
-- **Product Browsing & Filtering**
-  - Product grid rendered from static/mock JSON data
-  - Filter by category, max price, and search query
-  - Sort by price (low→high, high→low) or by title
-- **Global Cart Management**
-  - Slide-out cart drawer overlay
-  - Add / remove items, adjust quantity with +/-
-  - Real-time subtotal and grand total calculation
-- **UX Details**
-  - Cart icon badge shows total item count (sums quantities, not just line items)
-
-## Tech Stack
-
-- React
-- `useReducer` + `createContext` for global state (products, cart, filters, cart-open state)
-- Create React App
-
-## State Shape
-
-```ts
-interface Product {
-  id: string;
-  name: string;
-  category: string;
-  price: number;
-  image: string;
-  inStock: boolean;
-}
-
-interface CartItem extends Product {
-  quantity: number;
-  selected: boolean;
-}
-
-interface State {
-  products: Product[];
-  cart: CartItem[];
-  filters: {
-    searchQuery: string;
-    category: string;
-    maxPrice: number;
-    sortBy: 'default' | 'price-asc' | 'price-desc';
-  };
-  isCartOpen: boolean;
-}
+```text
+src/
+├── db.ts
+├── server.ts
+└── routes/
+    ├── customers.ts
+    ├── products.ts
+    ├── orders.ts
+    ├── orderItems.ts
+    ├── vendors.ts
+    └── supplies.ts
 ```
 
-## Actions
+## Prerequisites
 
-| Action Type | Payload | Description |
-|---|---|---|
-| `ADD_TO_CART` | `Product` | Adds item to cart or increments quantity if already present |
-| `REMOVE_FROM_CART` | `string` (id) | Removes line item completely from cart |
-| `UPDATE_QUANTITY` | `{ id: string; quantity: number }` | Sets specific quantity (removes item if quantity reaches 0) |
-| `CLEAR_CART` | `undefined` | Empties the cart array and resets promo code |
-| `SET_SEARCH_QUERY` | `string` | Updates search term filter |
-| `SET_CATEGORY` | `string` | Filters products by selected category |
-| `SET_SORT` | `string` | Updates sorting strategy |
-| `TOGGLE_CART` | `boolean` (optional) | Opens or closes the cart drawer |
+Before running the project, make sure the following are installed:
 
-## Getting Started
-### 1. Clone the repo
+* [Node.js](https://nodejs.org/)
+* [PostgreSQL](https://www.postgresql.org/)
+
+## Installation
+
+Clone the repository:
 
 ```bash
-git clone https://github.com/Not-PvP/lab_gearhubecommerce.git gearhub
-cd gearhub
+git clone https://github.com/Not-PvP/lab_backendrestapi.git
+cd <project-folder>
 ```
 
-### 2. Install dependencies
+Install the project dependencies:
 
 ```bash
 npm install
 ```
 
-### 3. Run the app
+## Database Setup
 
-```bash
-npm start
+Create a PostgreSQL database and run the provided database setup SQL script.
+
+The database contains the following tables:
+
+* `customer`
+* `orders`
+* `product`
+* `order_item`
+* `vendor`
+* `supplies`
+
+Make sure PostgreSQL is running before starting the API.
+
+## Environment Variables
+
+Create a `.env` file in the root directory:
+
+```env
+PORT=3000
+
+DB_USER=postgres
+DB_HOST=localhost
+DB_NAME=ecommerce_logistics
+DB_PASSWORD=your_password
+DB_PORT=5432
 ```
 
-Runs the app in development mode. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Replace the values with the PostgreSQL configuration for the local environment.
 
-### 4. Run tests (optional)
+The `.env` file should not be committed to the repository.
 
-```bash
-npm test
-```
+## Running the Project
 
-### 5. Build for production (optional)
+Start the development server using:
 
 ```bash
-npm run build
+npm run dev
 ```
 
-Bundles the app into the `build/` folder, minified and optimized for deployment.
+The API will be available at:
 
-## Known Limitations
+```text
+http://localhost:3000
+```
 
-- Checkout is simulated only, no real payment processing.
-- Product data such as stocks is static/mock, no live backend.
+All API endpoints use the following base path:
+
+```text
+http://localhost:3000/api/v1
+```
+
+## API Endpoints
+
+### Customers
+
+| Method | Endpoint                | Description          |
+| ------ | ----------------------- | -------------------- |
+| GET    | `/api/v1/customers`     | Get all customers    |
+| GET    | `/api/v1/customers/:id` | Get a customer by ID |
+| POST   | `/api/v1/customers`     | Create a customer    |
+| PUT    | `/api/v1/customers/:id` | Update a customer    |
+| DELETE | `/api/v1/customers/:id` | Delete a customer    |
+
+### Products
+
+| Method | Endpoint                                | Description                 |
+| ------ | --------------------------------------- | --------------------------- |
+| GET    | `/api/v1/products`                      | Get all products            |
+| GET    | `/api/v1/products?category=Electronics` | Filter products by category |
+| GET    | `/api/v1/products/:id`                  | Get a product by ID         |
+| POST   | `/api/v1/products`                      | Create a product            |
+| PATCH  | `/api/v1/products/:id/price`            | Update a product's price    |
+
+### Orders
+
+| Method | Endpoint                              | Description                        |
+| ------ | ------------------------------------- | ---------------------------------- |
+| GET    | `/api/v1/orders`                      | Get all orders                     |
+| GET    | `/api/v1/orders/customer/:customerId` | Get orders belonging to a customer |
+| POST   | `/api/v1/orders`                      | Create an order                    |
+| DELETE | `/api/v1/orders/:id`                  | Delete an order                    |
+
+### Order Items
+
+| Method | Endpoint                       | Description                     |
+| ------ | ------------------------------ | ------------------------------- |
+| GET    | `/api/v1/order-items/:orderId` | Get items belonging to an order |
+| POST   | `/api/v1/order-items`          | Add an item to an order         |
+
+### Vendors
+
+| Method | Endpoint          | Description     |
+| ------ | ----------------- | --------------- |
+| GET    | `/api/v1/vendors` | Get all vendors |
+
+### Supplies
+
+| Method | Endpoint                                | Description                        |
+| ------ | --------------------------------------- | ---------------------------------- |
+| GET    | `/api/v1/supplies/vendor/:vendorId`     | Get supplies belonging to a vendor |
+| PUT    | `/api/v1/supplies/:vendorId/:productId` | Update supply stock quantity       |
+
+## API Examples
+
+### Get All Customers
+
+```http
+GET /api/v1/customers
+```
+
+### Get a Customer
+
+```http
+GET /api/v1/customers/C101
+```
+
+### Create a Customer
+
+```http
+POST /api/v1/customers
+Content-Type: application/json
+```
+
+```json
+{
+  "customer_id": "C106",
+  "customer_name": "Frank Miller",
+  "city": "Austin",
+  "membership_level": "Silver"
+}
+```
+
+### Update a Customer
+
+```http
+PUT /api/v1/customers/C106
+Content-Type: application/json
+```
+
+```json
+{
+  "city": "Seattle",
+  "membership_level": "Gold"
+}
+```
+
+### Create a Product
+
+```http
+POST /api/v1/products
+Content-Type: application/json
+```
+
+```json
+{
+  "product_id": "P006",
+  "product_name": "Mechanical Keyboard",
+  "category": "Electronics",
+  "unit_price": 120.00
+}
+```
+
+### Update Product Price
+
+```http
+PATCH /api/v1/products/P006/price
+Content-Type: application/json
+```
+
+```json
+{
+  "unit_price": 99.99
+}
+```
+
+## Database Queries
+
+The API uses raw SQL queries through the PostgreSQL `pg` library.
+
+All queries use **parameterized values** to help prevent SQL injection.
+
+Example:
+
+```typescript
+const result = await pool.query(
+  "SELECT * FROM customer WHERE customer_id = $1",
+  [req.params.id]
+);
+```
+
+No ORM or query builder is used.
+
+The project also avoids multi-table `JOIN` queries as required by the activity specifications.
+
+## Error Handling
+
+The API uses `try/catch` blocks to handle database and request errors.
+
+Common responses include:
+
+* `200 OK` — Request completed successfully
+* `201 Created` — Resource was successfully created
+* `204 No Content` — Resource was successfully deleted without a response body
+* `400 Bad Request` — Invalid request or database constraint violation
+* `404 Not Found` — Requested resource does not exist
+* `500 Internal Server Error` — Unexpected server or database error
+
+## Testing
+
+The API can be tested using tools such as:
+
+* Postman
+* Thunder Client
+* Insomnia
+* `curl`
+
+Example:
+
+```bash
+curl http://localhost:3000/api/v1/customers
+```
+
+## Author
+
+**Niño Kriebel C. Olmo**
+

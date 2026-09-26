@@ -61,14 +61,15 @@ function Checkout() {
   const onClose = () => {
     clearPolling();
     if (popupRef.current && !popupRef.current.closed) popupRef.current.close();
+    
+
+    setAddress(EMPTY_ADDRESS);
+    setPaymentMethod("cod");
+    setStage("form");
+    setPlacedOrderId(null);
+    setErrorMessage("");
+    
     dispatch({ type: "TOGGLE_CHECKOUT", payload: false });
-    setTimeout(() => {
-      setAddress(EMPTY_ADDRESS);
-      setPaymentMethod("cod");
-      setStage("form");
-      setPlacedOrderId(null);
-      setErrorMessage("");
-    }, 250);
   };
 
   const onChangeField =

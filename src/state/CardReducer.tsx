@@ -160,7 +160,7 @@ export function cardReducer(state: State, action: Action): State {
         }),
         orders: [...state.orders, newOrder],
         cart: state.cart.filter((item) => !item.selected),
-        isCheckoutOpen: false,
+        isCheckoutOpen: true,
         isCartOpen: false,
       };
     }

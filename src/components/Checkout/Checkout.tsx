@@ -64,6 +64,7 @@ function Checkout() {
     clearPolling();
     if (popupRef.current && !popupRef.current.closed) popupRef.current.close();
     dispatch({ type: "TOGGLE_CHECKOUT", payload: false });
+    // delay reset until after the close transition so the form doesn't flash empty
     setTimeout(() => {
       setAddress(EMPTY_ADDRESS);
       setPaymentMethod("cod");
@@ -103,6 +104,7 @@ function Checkout() {
 
   const startPollingForPayment = (sessionId: string, orderId: string) => {
     const deadline = Date.now() + POLL_TIMEOUT_MS;
+    // prevents a slow response overlapping the next tick from finalizing the order twice
     let settled = false;
 
     pollIntervalRef.current = setInterval(async () => {
@@ -163,6 +165,7 @@ function Checkout() {
     );
 
     if (!popup) {
+      // no window.location.href fallback: that redirect target is never read, so the order would be lost
       setErrorMessage(
         "We couldn't open the secure payment window. Please allow pop-ups for this site and try again.",
       );
@@ -179,6 +182,7 @@ function Checkout() {
     setErrorMessage("");
 
     try {
+      // shipping must be its own line item or the Xendit charge undercounts the displayed total
       const { id, invoiceUrl } = await createInvoice(
         [
           ...selectedItems.map((item) => ({

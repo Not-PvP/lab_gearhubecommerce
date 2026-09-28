@@ -5,7 +5,7 @@
     "category": "Keyboard",
     "price": 2999,
     "image": "/product/atommk890.png",
-    "inStock": true
+    "stock": 12
   },
   {
     "id": "2",
@@ -13,7 +13,7 @@
     "category": "Mouse",
     "price": 1499,
     "image": "/product/gow191.png",
-    "inStock": true
+    "stock": 0
   },
   {
     "id": "3",
@@ -21,7 +21,7 @@
     "category": "Laptop",
     "price": 54999,
     "image": "/product/asusa15.png",
-    "inStock": true
+    "stock": 6
   },
   {
     "id": "4",
@@ -29,7 +29,7 @@
     "category": "Headphones",
     "price": 18990,
     "image": "/product/beatsstudiopro.png",
-    "inStock": true
+    "stock": 5
   },
   {
     "id": "5",
@@ -37,7 +37,7 @@
     "category": "Cameras",
     "price": 129999,
     "image": "/product/sonyalpha7.png",
-    "inStock": true
+    "stock": 3
   },
   {
     "id": "6",
@@ -45,7 +45,7 @@
     "category": "Driving",
     "price": 17999,
     "image": "/product/mozaracing.png",
-    "inStock": true
+    "stock": 10
   },
   {
     "id": "7",
@@ -53,7 +53,7 @@
     "category": "Monitor",
     "price": 10999,
     "image": "/product/xiaomi2k.png",
-    "inStock": true
+    "stock": 4
   },
   {
     "id": "8",
@@ -61,7 +61,7 @@
     "category": "Components",
     "price": 249999,
     "image": "/product/nvidiartx5090.png",
-    "inStock": true
+    "stock": 2
   },
   {
     "id": "9",
@@ -69,7 +69,7 @@
     "category": "Components",
     "price": 9999,
     "image": "/product/corsairvengeance.png",
-    "inStock": true
+    "stock": 15
   },
   {
     "id": "10",
@@ -77,7 +77,7 @@
     "category": "Mouse",
     "price": 7999,
     "image": "/product/logitechsuperlight.png",
-    "inStock": true
+    "stock": 7
   },
   {
     "id": "11",
@@ -85,7 +85,7 @@
     "category": "Mouse",
     "price": 7999,
     "image": "/product/pulsartenz.png",
-    "inStock": true
+    "stock": 5
   },
   {
     "id": "12",
@@ -93,7 +93,7 @@
     "category": "Keyboard",
     "price": 3499,
     "image": "/product/mchosex75.png",
-    "inStock": true
+    "stock": 9
   },
   {
     "id": "13",
@@ -101,7 +101,7 @@
     "category": "Keyboard",
     "price": 2499,
     "image": "/product/aulaf75.png",
-    "inStock": true
+    "stock": 3
   },
   {
     "id": "14",
@@ -109,7 +109,7 @@
     "category": "Laptop",
     "price": 79999,
     "image": "/product/lenovolegion5.png",
-    "inStock": true
+    "stock": 6
   },
   {
     "id": "15",
@@ -117,7 +117,7 @@
     "category": "Laptop",
     "price": 54999,
     "image": "/product/lenovoloq.png",
-    "inStock": true
+    "stock": 1
   },
   {
     "id": "16",
@@ -125,7 +125,7 @@
     "category": "Headphones",
     "price": 7499,
     "image": "/product/razerblackshark.png",
-    "inStock": true
+    "stock": 11
   },
   {
     "id": "17",
@@ -133,7 +133,7 @@
     "category": "Headphones",
     "price": 1299,
     "image": "/product/onikumagt808.png",
-    "inStock": true
+    "stock": 4
   },
   {
     "id": "18",
@@ -141,6 +141,6 @@
     "category": "Cameras",
     "price": 4999,
     "image": "/product/logitechc922x.png",
-    "inStock": true
+    "stock": 8
   }
 ]

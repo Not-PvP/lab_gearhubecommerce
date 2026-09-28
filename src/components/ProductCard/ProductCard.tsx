@@ -7,7 +7,7 @@ interface Product {
   category: string;
   price: number;
   image: string;
-  inStock: boolean;
+  stock: number;
 }
 
 interface ProductCardProps {
@@ -16,7 +16,7 @@ interface ProductCardProps {
 
 function ProductCard({ product }: ProductCardProps) {
   const { dispatch } = useCard();
-  const { name, category, price, image, inStock } = product;
+  const { name, category, price, image, stock } = product;
 
   const handleAddToCart = () => {
     dispatch({ type: "ADD_TO_CART", payload: product });
@@ -34,16 +34,16 @@ function ProductCard({ product }: ProductCardProps) {
         <p className="product-card__price">₱{price.toLocaleString()}</p>
         <p
           className={`product-card__stock ${
-            inStock ? "product-card__stock--in" : "product-card__stock--out"
+            stock > 0 ? "product-card__stock--in" : "product-card__stock--out"
           }`}
         >
-          {inStock ? "In Stock" : "Out of Stock"}
+          {stock > 5 ? "In Stock" : stock > 0 ? `Only ${stock} left` : "Out of Stock"}
         </p>
       </div>
 
       <button
         className="product-card__button"
-        disabled={!inStock}
+        disabled={stock === 0}
         onClick={handleAddToCart}
       >
         Add to Cart

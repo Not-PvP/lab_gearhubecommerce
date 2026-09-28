@@ -13,10 +13,10 @@ function ShoppingCart() {
   const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   const onClose = () => dispatch({ type: "TOGGLE_CART", payload: false });
-  const onIncrease = (id: string, quantity: number) =>
+  const onIncrease = (id: string, quantity: number, stock: number) =>
     dispatch({
       type: "UPDATE_QUANTITY",
-      payload: { id, quantity: quantity + 1 },
+      payload: { id, quantity: Math.min(quantity + 1, stock) },
     });
   const onDecrease = (id: string, quantity: number) =>
     dispatch({
@@ -91,10 +91,16 @@ function ShoppingCart() {
                       −
                     </button>
                     <span>{item.quantity}</span>
-                    <button onClick={() => onIncrease(item.id, item.quantity)}>
+                    <button onClick={() => onIncrease(item.id, item.quantity, item.stock)}
+                      disabled={item.quantity >= item.stock}>
                       +
                     </button>
                   </div>
+                  {item.quantity >= item.stock && (
+                      <p className="cart-stock-warning">
+                        Only {item.stock} left in stock
+                      </p>
+                    )}
                 </div>
                 <button
                   className="cart-item__remove"

@@ -19,6 +19,9 @@ function ProductGrid() {
     .filter((product) => product.price <= maxPrice);
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
+    if (a.stock === 0 && b.stock > 0) return 1;
+    if (a.stock > 0 && b.stock === 0) return -1;
+    
     if (sortBy === "price-asc") return a.price - b.price;
     if (sortBy === "price-desc") return b.price - a.price;
     return 0;

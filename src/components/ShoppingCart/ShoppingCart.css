@@ -317,3 +317,9 @@
   transform: none;
   box-shadow: none;
 }
+
+.cart-stock-warning {
+  color: #c0392b;
+  font-size: 12px;
+  margin-top: 4px;
+}

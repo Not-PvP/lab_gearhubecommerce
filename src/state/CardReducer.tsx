@@ -15,11 +15,15 @@ export const initialState: State = {
   },
   isCartOpen: false,
   isCheckoutOpen: false,
+  isOrderHistoryOpen: false,
 };
 
 export function cardReducer(state: State, action: Action): State {
   switch (action.type) {
     case "ADD_TO_CART": {
+      if (action.payload.stock <= 0) { 
+        return state;
+      }
       const existing = state.cart.find((item) => item.id === action.payload.id);
 
       if (existing) {
@@ -27,7 +31,7 @@ export function cardReducer(state: State, action: Action): State {
           ...state,
           cart: state.cart.map((item) =>
             item.id === action.payload.id
-              ? { ...item, quantity: item.quantity + 1 }
+              ? { ...item, quantity: Math.min(item.quantity + 1, item.stock) }
               : item,
           ),
         };
@@ -59,7 +63,7 @@ export function cardReducer(state: State, action: Action): State {
       return {
         ...state,
         cart: state.cart.map((item) =>
-          item.id === id ? { ...item, quantity } : item,
+          item.id === id ? { ...item, quantity: Math.min(quantity, item.stock) } : item,
         ),
       };
     }
@@ -115,6 +119,14 @@ export function cardReducer(state: State, action: Action): State {
       };
     }
 
+    case "TOGGLE_ORDER_HISTORY": {
+      return {
+        ...state,
+        isOrderHistoryOpen:
+          action.payload !== undefined ? action.payload : !state.isOrderHistoryOpen,
+      };
+    }
+
     case "PLACE_ORDER": {
       const selectedItems = state.cart.filter((item) => item.selected);
       if (selectedItems.length === 0) {
@@ -149,9 +161,15 @@ export function cardReducer(state: State, action: Action): State {
 
       return {
         ...state,
+        products: state.products.map((product) => {
+          const orderedItem = orderItems.find((item) => item.id === product.id);
+          return orderedItem
+            ? { ...product, stock: product.stock - orderedItem.quantity }
+            : product;
+        }),
         orders: [...state.orders, newOrder],
         cart: state.cart.filter((item) => !item.selected),
-        isCheckoutOpen: false,
+        isCheckoutOpen: true,
         isCartOpen: false,
       };
     }

@@ -63,7 +63,16 @@ function Checkout() {
   const onClose = () => {
     clearPolling();
     if (popupRef.current && !popupRef.current.closed) popupRef.current.close();
+    
+
+    setAddress(EMPTY_ADDRESS);
+    setPaymentMethod("cod");
+    setStage("form");
+    setPlacedOrderId(null);
+    setErrorMessage("");
+    
     dispatch({ type: "TOGGLE_CHECKOUT", payload: false });
+<<<<<<< HEAD
     setTimeout(() => {
       setAddress(EMPTY_ADDRESS);
       setPaymentMethod("cod");
@@ -72,12 +81,22 @@ function Checkout() {
       setPlacedOrderStatus("PENDING");
       setErrorMessage("");
     }, 250);
+=======
+>>>>>>> 858d6636dca78a2c7c8c633421c7e70f61ea58d9
   };
 
   const onChangeField =
     (field: keyof ShippingAddress) =>
-    (e: React.ChangeEvent<HTMLInputElement>) =>
-      setAddress((prev) => ({ ...prev, [field]: e.target.value }));
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      let value = e.target.value;
+      if(field === "phone") {
+        value = value.replace(/\D/g, "").slice(0, 11);
+      }
+      if (field === "postalCode") {
+        value = value.replace(/\D/g, "").slice(0, 4);
+      }
+      setAddress((prev) => ({ ...prev, [field]: value }));
+    };
 
   const isAddressComplete = Object.values(address).every(
     (value) => value.trim().length > 0,
@@ -330,13 +349,19 @@ function Checkout() {
                 onChange={onChangeField("fullName")}
                 required
               />
-              <input
-                className="checkout-form__input"
-                placeholder="Phone Number"
-                value={address.phone}
-                onChange={onChangeField("phone")}
-                required
-              />
+              <div className="checkout-phone-input">
+                <span className="checkout-phone-prefix">09</span>
+                <input
+                  className="checkout-form__input"
+                  placeholder="123456789"
+                  value={address.phone.slice(2)}
+                  onChange={(e) => {
+                    const digits = e.target.value.replace(/\D/g, "").slice(0, 9);
+                    setAddress((prev) => ({ ...prev, phone: `09${digits}` }));
+                  }}
+                  required
+                />
+              </div>
               <input
                 className="checkout-form__input checkout-form__input--full"
                 placeholder="Street Address"
@@ -361,6 +386,8 @@ function Checkout() {
               <input
                 className="checkout-form__input"
                 placeholder="Postal Code"
+                pattern="[0-9]{4}"
+                title="Enter a valid 4-digit postal code."
                 value={address.postalCode}
                 onChange={onChangeField("postalCode")}
                 required

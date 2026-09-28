@@ -17,6 +17,7 @@ export type Action =
   | { type: "TOGGLE_CART"; payload?: boolean }
   | { type: "TOGGLE_ITEM_SELECTED"; payload: string }
   | { type: "TOGGLE_CHECKOUT"; payload?: boolean }
+  | { type: "TOGGLE_ORDER_HISTORY"; payload?: boolean }
   | {
       type: "PLACE_ORDER";
       payload: {

@@ -36,7 +36,8 @@ const Navbar: React.FC = () => {
       </div>
 
       <div className="navbar-actions">
-        <button className="navbar-icon-btn">
+        <button className="navbar-icon-btn"
+          onClick={() => dispatch({ type: "TOGGLE_ORDER_HISTORY" })}>
           <img src="/images/user.svg" alt="user" className="navbar-user-icon" />
         </button>
 

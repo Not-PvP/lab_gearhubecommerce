@@ -1,4 +1,9 @@
-import { Product, ShippingAddress, PaymentMethod } from "../types/types";
+import {
+  Product,
+  ShippingAddress,
+  PaymentMethod,
+  OrderStatus,
+} from "../types/types";
 
 export type Action =
   | { type: "ADD_TO_CART"; payload: Product }
@@ -18,5 +23,6 @@ export type Action =
         id: string;
         shippingAddress: ShippingAddress;
         paymentMethod: PaymentMethod;
+        status: OrderStatus;
       };
     };

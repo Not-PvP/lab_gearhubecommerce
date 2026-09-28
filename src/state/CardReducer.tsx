@@ -143,7 +143,7 @@ export function cardReducer(state: State, action: Action): State {
         total: subtotal + shipping,
         shippingAddress: action.payload.shippingAddress,
         paymentMethod: action.payload.paymentMethod,
-        status: "PENDING",
+        status: action.payload.status,
         createdAt: new Date().toISOString(),
       };
 

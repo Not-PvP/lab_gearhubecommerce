@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useCard } from "../../state/CardContext";
-import { PaymentMethod, ShippingAddress } from "../../types/types";
+import { OrderStatus, PaymentMethod, ShippingAddress } from "../../types/types";
 import { createInvoice, getInvoiceStatus } from "../../utils/xenditClient";
 import "./Checkout.css";
 
@@ -26,6 +26,8 @@ function Checkout() {
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cod");
   const [stage, setStage] = useState<Stage>("form");
   const [placedOrderId, setPlacedOrderId] = useState<string | null>(null);
+  const [placedOrderStatus, setPlacedOrderStatus] =
+    useState<OrderStatus>("PENDING");
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   const popupRef = useRef<Window | null>(null);
@@ -67,6 +69,7 @@ function Checkout() {
       setPaymentMethod("cod");
       setStage("form");
       setPlacedOrderId(null);
+      setPlacedOrderStatus("PENDING");
       setErrorMessage("");
     }, 250);
   };
@@ -80,26 +83,32 @@ function Checkout() {
     (value) => value.trim().length > 0,
   );
 
-  const finalizeOrder = (orderId: string) => {
+  const finalizeOrder = (orderId: string, status: OrderStatus = "PENDING") => {
     dispatch({
       type: "PLACE_ORDER",
-      payload: { id: orderId, shippingAddress: address, paymentMethod },
+      payload: { id: orderId, shippingAddress: address, paymentMethod, status },
     });
     setPlacedOrderId(orderId);
+    setPlacedOrderStatus(status);
     setStage("confirmed");
   };
 
   const startPollingForPayment = (sessionId: string, orderId: string) => {
     const deadline = Date.now() + POLL_TIMEOUT_MS;
+    let settled = false;
 
     pollIntervalRef.current = setInterval(async () => {
+      if (settled) return;
+
       if (popupRef.current?.closed) {
+        settled = true;
         clearPolling();
         setStage("cancelled");
         return;
       }
 
       if (Date.now() > deadline) {
+        settled = true;
         clearPolling();
         if (popupRef.current && !popupRef.current.closed) popupRef.current.close();
         setErrorMessage("This checkout session timed out. Please try again.");
@@ -109,11 +118,14 @@ function Checkout() {
 
       try {
         const { status } = await getInvoiceStatus(sessionId);
+        if (settled) return;
         if (status === "PAID" || status === "SETTLED") {
+          settled = true;
           clearPolling();
           if (popupRef.current && !popupRef.current.closed) popupRef.current.close();
-          finalizeOrder(orderId);
+          finalizeOrder(orderId, "PAID");
         } else if (status === "EXPIRED") {
+          settled = true;
           clearPolling();
           if (popupRef.current && !popupRef.current.closed) popupRef.current.close();
           setErrorMessage("This invoice expired before payment was completed.");
@@ -141,38 +153,49 @@ function Checkout() {
       "xendit_checkout",
       "width=480,height=720",
     );
-    popupRef.current = popup;
 
-    if (popup) {
-      popup.document.write(
-        "<p style='font-family:sans-serif;padding:24px;color:#555'>Loading secure checkout&hellip;</p>",
+    if (!popup) {
+      setErrorMessage(
+        "We couldn't open the secure payment window. Please allow pop-ups for this site and try again.",
       );
+      setStage("error");
+      return;
     }
+
+    popupRef.current = popup;
+    popup.document.write(
+      "<p style='font-family:sans-serif;padding:24px;color:#555'>Loading secure checkout&hellip;</p>",
+    );
 
     setStage("awaiting-payment");
     setErrorMessage("");
 
     try {
       const { id, invoiceUrl } = await createInvoice(
-        selectedItems.map((item) => ({
-          name: item.name,
-          unitPrice: item.price,
-          quantity: item.quantity,
-        })),
+        [
+          ...selectedItems.map((item) => ({
+            name: item.name,
+            unitPrice: item.price,
+            quantity: item.quantity,
+          })),
+          ...(shipping > 0
+            ? [{ name: "Shipping", unitPrice: shipping, quantity: 1 }]
+            : []),
+        ],
         orderId,
         [paymentMethod === "gcash" ? "GCASH" : "CREDIT_CARD"],
       );
 
-      if (popup) {
-        popup.location.href = invoiceUrl;
-      } else {
-        window.location.href = invoiceUrl;
+      if (popup.closed) {
+        setErrorMessage("The payment window was closed. Please try again.");
+        setStage("error");
         return;
       }
 
+      popup.location.href = invoiceUrl;
       startPollingForPayment(id, orderId);
     } catch (err) {
-      if (popup && !popup.closed) popup.close();
+      if (!popup.closed) popup.close();
       setErrorMessage(
         err instanceof Error
           ? err.message
@@ -223,7 +246,9 @@ function Checkout() {
               Your order has been placed.
             </p>
             <p className="checkout-confirmation__id">Order ID: {placedOrderId}</p>
-            <p className="checkout-confirmation__status">Status: PENDING</p>
+            <p className="checkout-confirmation__status">
+              Status: {placedOrderStatus}
+            </p>
             <button className="checkout-modal__submit" onClick={onClose}>
               Continue Shopping
             </button>

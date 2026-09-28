@@ -63,16 +63,7 @@ function Checkout() {
   const onClose = () => {
     clearPolling();
     if (popupRef.current && !popupRef.current.closed) popupRef.current.close();
-    
-
-    setAddress(EMPTY_ADDRESS);
-    setPaymentMethod("cod");
-    setStage("form");
-    setPlacedOrderId(null);
-    setErrorMessage("");
-    
     dispatch({ type: "TOGGLE_CHECKOUT", payload: false });
-<<<<<<< HEAD
     setTimeout(() => {
       setAddress(EMPTY_ADDRESS);
       setPaymentMethod("cod");
@@ -81,8 +72,6 @@ function Checkout() {
       setPlacedOrderStatus("PENDING");
       setErrorMessage("");
     }, 250);
-=======
->>>>>>> 858d6636dca78a2c7c8c633421c7e70f61ea58d9
   };
 
   const onChangeField =

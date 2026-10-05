@@ -1,6 +1,6 @@
 # E-Commerce & Logistics Backend REST API
 
-A RESTful backend API developed using **Node.js, TypeScript, Express, and PostgreSQL**. This project implements CRUD operations for customers, products, orders, order items, vendors, and supplies using raw SQL queries through the `pg` library.
+A RESTful backend API developed using **Node.js, TypeScript, Express, PostgreSQL, and Prisma**. This project implements CRUD operations for products and cart management while using Prisma ORM to model and query the PostgreSQL database.
 
 ## Technologies Used
 
@@ -8,7 +8,7 @@ A RESTful backend API developed using **Node.js, TypeScript, Express, and Postgr
 * TypeScript
 * Express.js
 * PostgreSQL
-* node-postgres (`pg`)
+* Prisma ORM
 * dotenv
 
 ## Project Structure
@@ -50,36 +50,28 @@ npm install
 
 ## Database Setup
 
-Create a PostgreSQL database and run the provided database setup SQL script.
+Create a PostgreSQL database and point Prisma at it with a `DATABASE_URL` in the backend environment.
 
-The database contains the following tables:
+The Prisma schema includes these models:
 
-* `customer`
-* `orders`
-* `product`
-* `order_item`
-* `vendor`
-* `supplies`
+* `User`
+* `Product`
+* `CartItem`
 
 Make sure PostgreSQL is running before starting the API.
 
 ## Environment Variables
 
-Create a `.env` file in the root directory:
+Create a `.env` file in the `backend` directory:
 
 ```env
-PORT=3000
-
-DB_USER=postgres
-DB_HOST=localhost
-DB_NAME=ecommerce_logistics
-DB_PASSWORD=your_password
-DB_PORT=5432
+PORT=5000
+DATABASE_URL="postgresql://postgres:your_password@localhost:5432/ecommerce_logistics?schema=public"
 ```
 
 Replace the values with the PostgreSQL configuration for the local environment.
 
-The `.env` file should not be committed to the repository.
+The `.env` file should not be committed to the repository. A template is available at `backend/.env.example`.
 
 ## Running the Project
 

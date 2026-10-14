@@ -57,8 +57,12 @@ export interface Order {
   createdAt: string;
 }
 
+export type LoadStatus = "loading" | "ready" | "error";
+
 export interface State {
   products: Product[];
+  productsStatus: LoadStatus;
+  productsError: string;
   cart: CartItem[];
   orders: Order[];
   filters: Filters;

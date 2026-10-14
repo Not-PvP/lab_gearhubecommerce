@@ -1,10 +1,11 @@
-import { State, Order, OrderItem } from "../types/types";
+import { State } from "../types/types";
 import { Action } from "./actions";
 
-const SHIPPING_FEE = 150;
 
 export const initialState: State = {
   products: [],
+  productsStatus: "loading",
+  productsError: "",
   cart: [],
   orders: [],
   filters: {
@@ -127,48 +128,36 @@ export function cardReducer(state: State, action: Action): State {
       };
     }
 
-    case "PLACE_ORDER": {
-      const selectedItems = state.cart.filter((item) => item.selected);
-      if (selectedItems.length === 0) {
-        return state;
-      }
+    case "SET_PRODUCTS": {
+      return { ...state, products: action.payload, productsStatus: "ready", productsError: "" };
+    }
 
-      const orderItems: OrderItem[] = selectedItems.map((item) => ({
-        id: item.id,
-        name: item.name,
-        image: item.image,
-        unitPrice: item.price,
-        quantity: item.quantity,
-      }));
-
-      const subtotal = orderItems.reduce(
-        (sum, item) => sum + item.unitPrice * item.quantity,
-        0,
-      );
-      const shipping = subtotal > 0 ? SHIPPING_FEE : 0;
-
-      const newOrder: Order = {
-        id: action.payload.id,
-        items: orderItems,
-        subtotal,
-        shipping,
-        total: subtotal + shipping,
-        shippingAddress: action.payload.shippingAddress,
-        paymentMethod: action.payload.paymentMethod,
-        status: action.payload.status,
-        createdAt: new Date().toISOString(),
+    case "SET_PRODUCTS_STATUS": {
+      return {
+        ...state,
+        productsStatus: action.payload.status,
+        productsError: action.payload.error ?? "",
       };
+    }
+
+    case "SET_ORDERS": {
+      return { ...state, orders: action.payload };
+    }
+
+    case "PLACE_ORDER": {
+      // the backend already validated stock and saved the order; mirror it locally
+      const order = action.payload;
+      const orderedQty = new Map(order.items.map((item) => [item.id, item.quantity]));
 
       return {
         ...state,
-        products: state.products.map((product) => {
-          const orderedItem = orderItems.find((item) => item.id === product.id);
-          return orderedItem
-            ? { ...product, stock: product.stock - orderedItem.quantity }
-            : product;
-        }),
-        orders: [...state.orders, newOrder],
-        cart: state.cart.filter((item) => !item.selected),
+        products: state.products.map((product) =>
+          orderedQty.has(product.id)
+            ? { ...product, stock: Math.max(0, product.stock - orderedQty.get(product.id)!) }
+            : product,
+        ),
+        orders: [order, ...state.orders.filter((existing) => existing.id !== order.id)],
+        cart: state.cart.filter((item) => !orderedQty.has(item.id)),
         isCheckoutOpen: true,
         isCartOpen: false,
       };

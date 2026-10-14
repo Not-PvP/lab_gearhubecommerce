@@ -9,7 +9,8 @@
     "prisma:migrate": "prisma migrate dev",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prisma:status": "prisma migrate status",
-    "prisma:baseline": "prisma migrate resolve --applied 20261014033405_init"
+    "prisma:baseline": "prisma migrate resolve --applied 20261014033405_init",
+    "seed": "prisma db seed"
   },
   "keywords": [],
   "author": "",
@@ -33,5 +34,8 @@
     "nodemon": "^3.1.14",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
   }
 }

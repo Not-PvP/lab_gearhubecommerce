@@ -1,9 +1,4 @@
-import {
-  Product,
-  ShippingAddress,
-  PaymentMethod,
-  OrderStatus,
-} from "../types/types";
+import { Product, Order, LoadStatus } from "../types/types";
 
 export type Action =
   | { type: "ADD_TO_CART"; payload: Product }
@@ -18,12 +13,8 @@ export type Action =
   | { type: "TOGGLE_ITEM_SELECTED"; payload: string }
   | { type: "TOGGLE_CHECKOUT"; payload?: boolean }
   | { type: "TOGGLE_ORDER_HISTORY"; payload?: boolean }
-  | {
-      type: "PLACE_ORDER";
-      payload: {
-        id: string;
-        shippingAddress: ShippingAddress;
-        paymentMethod: PaymentMethod;
-        status: OrderStatus;
-      };
-    };
+  | { type: "SET_PRODUCTS"; payload: Product[] }
+  | { type: "SET_PRODUCTS_STATUS"; payload: { status: LoadStatus; error?: string } }
+  | { type: "SET_ORDERS"; payload: Order[] }
+  // the order as saved by the backend (POST /api/orders)
+  | { type: "PLACE_ORDER"; payload: Order };

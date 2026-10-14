@@ -286,6 +286,181 @@ app.delete('/api/cart/:id', async (req: Request, res: Response) => {
   }
 });
 
+// ---------- Orders ----------
+
+const SHIPPING_FEE = 150;
+const PAYMENT_METHODS = ['cod', 'card', 'gcash'] as const;
+const ADDRESS_FIELDS = ['fullName', 'street', 'city', 'province', 'postalCode', 'phone'] as const;
+
+type ShippingAddress = Record<(typeof ADDRESS_FIELDS)[number], string>;
+
+// Thrown inside the order transaction so it rolls back and the client gets a clear status code.
+class OrderError extends Error {
+  constructor(public status: number, message: string) {
+    super(message);
+  }
+}
+
+const orderInclude = { order_items: { include: { products: true } } } as const;
+
+type OrderWithItems = Prisma.ordersGetPayload<{ include: typeof orderInclude }>;
+
+const parseAddress = (raw: string): ShippingAddress | string => {
+  try {
+    return JSON.parse(raw) as ShippingAddress;
+  } catch {
+    return raw;
+  }
+};
+
+const serializeOrder = (order: OrderWithItems) => {
+  const items = order.order_items.map((item) => ({
+    id: String(item.product_id),
+    name: item.products?.name ?? 'Removed product',
+    image: item.products?.imageUrl ?? '',
+    unitPrice: Number(item.unit_price),
+    quantity: item.quantity,
+  }));
+  const subtotal = items.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
+  const shipping = subtotal > 0 ? SHIPPING_FEE : 0;
+
+  return {
+    id: String(order.id),
+    items,
+    subtotal,
+    shipping,
+    total: subtotal + shipping,
+    shippingAddress: parseAddress(order.shipping_address),
+    paymentMethod: order.payment_method,
+    status: order.status,
+    createdAt: (order.created_at ?? new Date()).toISOString(),
+  };
+};
+
+app.post('/api/orders', async (req: Request, res: Response) => {
+  const { items, shippingAddress, paymentMethod, status, userId } = req.body as {
+    items?: { productId?: number | string; quantity?: number | string }[];
+    shippingAddress?: Partial<ShippingAddress>;
+    paymentMethod?: string;
+    status?: string;
+    userId?: number | string;
+  };
+
+  // --- validate the request before touching the database ---
+  if (!Array.isArray(items) || items.length === 0) {
+    res.status(400).json({ error: 'items must be a non-empty array' });
+    return;
+  }
+  if (!paymentMethod || !PAYMENT_METHODS.includes(paymentMethod as (typeof PAYMENT_METHODS)[number])) {
+    res.status(400).json({ error: `paymentMethod must be one of: ${PAYMENT_METHODS.join(', ')}` });
+    return;
+  }
+  const missingField = ADDRESS_FIELDS.find((field) => !shippingAddress?.[field]?.toString().trim());
+  if (missingField) {
+    res.status(400).json({ error: `shippingAddress.${missingField} is required` });
+    return;
+  }
+  // COD orders start as PENDING; online payments are only saved after Xendit reports them PAID.
+  const orderStatus = status === 'PAID' ? 'PAID' : 'PENDING';
+
+  // merge duplicate lines so stock is checked against the real total per product
+  const quantities = new Map<number, number>();
+  for (const line of items) {
+    const productId = Number(line.productId);
+    const quantity = Number(line.quantity);
+    if (!Number.isInteger(productId) || !Number.isInteger(quantity) || quantity <= 0) {
+      res.status(400).json({ error: 'Each item needs an integer productId and a positive integer quantity' });
+      return;
+    }
+    quantities.set(productId, (quantities.get(productId) ?? 0) + quantity);
+  }
+
+  try {
+    const order = await prisma.$transaction(async (tx) => {
+      const productIds = [...quantities.keys()];
+      const products = await tx.product.findMany({ where: { id: { in: productIds } } });
+      const productById = new Map(products.map((product) => [product.id, product]));
+
+      for (const [productId, quantity] of quantities) {
+        const product = productById.get(productId);
+        if (!product) {
+          throw new OrderError(404, `Product ${productId} no longer exists`);
+        }
+
+        // conditional decrement: only succeeds if enough stock is left at this moment,
+        // so two customers can't both buy the last unit
+        const updated = await tx.product.updateMany({
+          where: { id: productId, stockQuantity: { gte: quantity } },
+          data: { stockQuantity: { decrement: quantity } },
+        });
+        if (updated.count === 0) {
+          throw new OrderError(
+            409,
+            product.stockQuantity === 0
+              ? `${product.name} is out of stock`
+              : `Only ${product.stockQuantity} left of ${product.name}`,
+          );
+        }
+      }
+
+      return tx.orders.create({
+        data: {
+          user_id: userId != null ? Number(userId) : null,
+          status: orderStatus,
+          payment_method: paymentMethod,
+          shipping_address: JSON.stringify(
+            Object.fromEntries(ADDRESS_FIELDS.map((field) => [field, String(shippingAddress![field]).trim()])),
+          ),
+          order_items: {
+            // unit price comes from the database, never from the browser
+            create: [...quantities].map(([productId, quantity]) => ({
+              product_id: productId,
+              quantity,
+              unit_price: productById.get(productId)!.price,
+            })),
+          },
+        },
+        include: orderInclude,
+      });
+    });
+
+    res.status(201).json(serializeOrder(order));
+  } catch (error) {
+    if (error instanceof OrderError) {
+      res.status(error.status).json({ error: error.message });
+      return;
+    }
+    console.error(error);
+    res.status(500).json({ error: 'Failed to place order' });
+  }
+});
+
+// GET /api/orders?ids=3,4,5 — guests have no account yet, so the browser remembers its own order ids
+app.get('/api/orders', async (req: Request, res: Response) => {
+  const ids = String(req.query.ids ?? '')
+    .split(',')
+    .map((id) => Number(id))
+    .filter((id) => Number.isInteger(id) && id > 0)
+    .slice(0, 100);
+
+  if (ids.length === 0) {
+    res.json([]);
+    return;
+  }
+
+  try {
+    const orders = await prisma.orders.findMany({
+      where: { id: { in: ids } },
+      include: orderInclude,
+      orderBy: { id: 'desc' },
+    });
+    res.json(orders.map(serializeOrder));
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to fetch orders' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });

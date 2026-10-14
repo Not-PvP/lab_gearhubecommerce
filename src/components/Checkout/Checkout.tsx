@@ -3,6 +3,7 @@ import { useCard } from "../../state/CardContext";
 import { OrderStatus, PaymentMethod, ShippingAddress } from "../../types/types";
 import { createInvoice, getInvoiceStatus } from "../../utils/xenditClient";
 import { PROVINCES, REGION_VI } from "../../utils/locations";
+import { createOrder, saveOrderId } from "../../utils/api";
 import "./Checkout.css";
 
 const EMPTY_ADDRESS: ShippingAddress = {
@@ -17,7 +18,7 @@ const EMPTY_ADDRESS: ShippingAddress = {
 const POLL_INTERVAL_MS = 2500;
 const POLL_TIMEOUT_MS = 10 * 60 * 1000; // 10 minutes
 
-type Stage = "form" | "awaiting-payment" | "confirmed" | "cancelled" | "error";
+type Stage = "form" | "placing" | "awaiting-payment" | "confirmed" | "cancelled" | "error";
 
 function Checkout() {
   const { state, dispatch } = useCard();
@@ -93,14 +94,31 @@ function Checkout() {
     (value) => value.trim().length > 0,
   );
 
-  const finalizeOrder = (orderId: string, status: OrderStatus = "PENDING") => {
-    dispatch({
-      type: "PLACE_ORDER",
-      payload: { id: orderId, shippingAddress: address, paymentMethod, status },
-    });
-    setPlacedOrderId(orderId);
-    setPlacedOrderStatus(status);
-    setStage("confirmed");
+  // Saves the order in the database (POST /api/orders). The backend re-checks stock,
+  // uses its own prices and decrements stock in one transaction.
+  const finalizeOrder = async (reference: string, status: "PENDING" | "PAID" = "PENDING") => {
+    setStage("placing");
+    try {
+      const order = await createOrder({
+        items: selectedItems.map((item) => ({ productId: item.id, quantity: item.quantity })),
+        shippingAddress: address,
+        paymentMethod,
+        status,
+      });
+      saveOrderId(order.id);
+      dispatch({ type: "PLACE_ORDER", payload: order });
+      setPlacedOrderId(order.id);
+      setPlacedOrderStatus(order.status);
+      setStage("confirmed");
+    } catch (err) {
+      const reason = err instanceof Error ? err.message : "Couldn't save your order.";
+      setErrorMessage(
+        status === "PAID"
+          ? `Your payment went through, but we couldn't save the order: ${reason} Keep this payment reference: ${reference}.`
+          : reason,
+      );
+      setStage("error");
+    }
   };
 
   const startPollingForPayment = (sessionId: string, orderId: string) => {
@@ -246,6 +264,8 @@ function Checkout() {
               ? "Order Confirmed"
               : stage === "awaiting-payment"
                 ? "Complete Payment"
+                : stage === "placing"
+                  ? "Placing Order"
                 : stage === "cancelled"
                   ? "Payment Cancelled"
                   : stage === "error"
@@ -263,13 +283,21 @@ function Checkout() {
             <p className="checkout-confirmation__text">
               Your order has been placed.
             </p>
-            <p className="checkout-confirmation__id">Order ID: {placedOrderId}</p>
+            <p className="checkout-confirmation__id">Order #{placedOrderId}</p>
             <p className="checkout-confirmation__status">
               Status: {placedOrderStatus}
             </p>
             <button className="checkout-modal__submit" onClick={onClose}>
               Continue Shopping
             </button>
+          </div>
+        )}
+
+        {stage === "placing" && (
+          <div className="checkout-confirmation" role="status">
+            <p className="checkout-confirmation__spinner" aria-hidden="true" />
+            <p className="checkout-confirmation__text">Placing your order&hellip;</p>
+            <p className="checkout-confirmation__status">Checking stock and saving your order.</p>
           </div>
         )}
 

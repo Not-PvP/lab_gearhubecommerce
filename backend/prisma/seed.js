@@ -1,4 +1,4 @@
-// Seeds the products table from the frontend's original catalog file.
+// Seeds the products table from prisma/seed-data/products.json.
 // Safe to run more than once: products are upserted by id, so re-running
 // resets names/prices/stock for these 18 products and leaves any others alone.
 //   npm run seed
@@ -7,7 +7,7 @@ const path = require("path");
 const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
-const catalog = require(path.join(__dirname, "..", "..", "src", "utils", "mockProduct.json"));
+const catalog = require(path.join(__dirname, "seed-data", "products.json"));
 
 async function main() {
   for (const item of catalog) {

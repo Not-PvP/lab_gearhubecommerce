@@ -1,270 +1,204 @@
-# E-Commerce & Logistics Backend REST API
+# GearHub
 
-A RESTful backend API developed using **Node.js, TypeScript, Express, PostgreSQL, and Prisma**. This project implements CRUD operations for products and cart management while using Prisma ORM to model and query the PostgreSQL database.
+GearHub is an e-commerce web app for gaming gear, built for the QuickCart Express project spec. Customers browse and search products, add them to a cart, and check out with cash on delivery, card or GCash.
 
-## Technologies Used
+It runs as three parts on your machine:
 
-* Node.js
-* TypeScript
-* Express.js
-* PostgreSQL
-* Prisma ORM
-* dotenv
+| Part | Folder | Tech | Port |
+| --- | --- | --- | --- |
+| Storefront | project root | React, TypeScript, `useReducer` + Context | 3000 |
+| REST API | `backend/` | Express, TypeScript, Prisma, PostgreSQL | 5000 |
+| Payment server | `server/` | Express, Xendit Invoice API (test mode) | 4000 |
 
-## Project Structure
-
-```text
-src/
-├── db.ts
-├── server.ts
-└── routes/
-    ├── customers.ts
-    ├── products.ts
-    ├── orders.ts
-    ├── orderItems.ts
-    ├── vendors.ts
-    └── supplies.ts
-```
+The storefront holds no data of its own. Products and orders come from the REST API, and the payment server keeps the Xendit secret key off the browser.
 
 ## Prerequisites
 
-Before running the project, make sure the following are installed:
+- [Node.js](https://nodejs.org/) 18 or newer
+- [PostgreSQL](https://www.postgresql.org/) running locally
+- A [Xendit](https://dashboard.xendit.co/) account in test mode (only for card and GCash checkout)
 
-* [Node.js](https://nodejs.org/)
-* [PostgreSQL](https://www.postgresql.org/)
+## First-time setup
 
-## Installation
-
-Clone the repository:
-
-```bash
-git clone https://github.com/Not-PvP/lab_backendrestapi.git
-cd <project-folder>
-```
-
-Install the project dependencies:
+### 1. Install dependencies
 
 ```bash
 npm install
+cd backend && npm install && cd ..
+cd server && npm install && cd ..
 ```
 
-## Database Setup
+### 2. Create the environment files
 
-Create a PostgreSQL database and point Prisma at it with a `DATABASE_URL` in the backend environment.
-
-The Prisma schema includes these models:
-
-* `User`
-* `Product`
-* `CartItem`
-
-Make sure PostgreSQL is running before starting the API.
-
-## Environment Variables
-
-Create a `.env` file in the `backend` directory:
+**`backend/.env`** (copy `backend/.env.example`):
 
 ```env
 PORT=5000
-DATABASE_URL="postgresql://postgres:your_password@localhost:5432/ecommerce_logistics?schema=public"
+DATABASE_URL="postgresql://postgres:your_password@localhost:5432/ecommerce?schema=public"
 ```
 
-Replace the values with the PostgreSQL configuration for the local environment.
+**`server/.env`** (copy `server/.env.example`):
 
-The `.env` file should not be committed to the repository. A template is available at `backend/.env.example`.
+```env
+XENDIT_SECRET_KEY=xnd_development_your_secret_key
+XENDIT_CALLBACK_VERIFICATION_TOKEN=
+PORT=4000
+CLIENT_ORIGIN=http://localhost:3000
+```
 
-## Running the Project
+Use a Xendit **secret** key (`xnd_development_...`) with Money-In write permission, from Settings > API Keys in test mode. The public key (`xnd_public_...`) can't create invoices. Never commit either `.env` file.
 
-Start the development server using:
+### 3. Set up the database
+
+Create an empty PostgreSQL database named `ecommerce`, then from `backend/`:
 
 ```bash
+npx prisma migrate deploy   # creates the tables
+npm run seed                # loads the 18 products
+```
+
+**Already have the tables** (for example, from the earlier SQL setup)? Don't run `migrate deploy`. Mark the existing schema as the starting point instead:
+
+```bash
+npm run prisma:baseline
+npm run prisma:status       # should say "Database schema is up to date!"
+```
+
+## Running the app
+
+Open three terminals:
+
+```bash
+# Terminal 1: REST API on http://localhost:5000
+cd backend
 npm run dev
+
+# Terminal 2: payment server on http://localhost:4000
+cd server
+npm start
+
+# Terminal 3: storefront on http://localhost:3000
+npm start
 ```
 
-The API will be available at:
+The payment server is only needed for card and GCash checkout. Cash on delivery works with the API and storefront alone.
 
-```text
-http://localhost:3000
+To browse the database while the app runs:
+
+```bash
+cd backend
+npx prisma studio           # opens http://localhost:5555
 ```
 
-All API endpoints use the following base path:
+## Useful backend scripts
 
-```text
-http://localhost:3000/api/v1
-```
+Run these from `backend/`.
 
-## API Endpoints
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Starts the API and restarts it when files change |
+| `npm run seed` | Loads or resets the 18 products from `prisma/seed-data/products.json` |
+| `npm run prisma:migrate` | Creates and applies a migration after you edit `prisma/schema.prisma` |
+| `npm run prisma:status` | Checks the database matches the migrations |
+| `npm run prisma:generate` | Regenerates the Prisma client (stop `npm run dev` first on Windows) |
 
-### Customers
+## API endpoints
 
-| Method | Endpoint                | Description          |
-| ------ | ----------------------- | -------------------- |
-| GET    | `/api/v1/customers`     | Get all customers    |
-| GET    | `/api/v1/customers/:id` | Get a customer by ID |
-| POST   | `/api/v1/customers`     | Create a customer    |
-| PUT    | `/api/v1/customers/:id` | Update a customer    |
-| DELETE | `/api/v1/customers/:id` | Delete a customer    |
+Base URL: `http://localhost:5000`
 
 ### Products
 
-| Method | Endpoint                                | Description                 |
-| ------ | --------------------------------------- | --------------------------- |
-| GET    | `/api/v1/products`                      | Get all products            |
-| GET    | `/api/v1/products?category=Electronics` | Filter products by category |
-| GET    | `/api/v1/products/:id`                  | Get a product by ID         |
-| POST   | `/api/v1/products`                      | Create a product            |
-| PATCH  | `/api/v1/products/:id/price`            | Update a product's price    |
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| GET | `/api/products` | All products |
+| GET | `/api/products/:id` | One product |
 
 ### Orders
 
-| Method | Endpoint                              | Description                        |
-| ------ | ------------------------------------- | ---------------------------------- |
-| GET    | `/api/v1/orders`                      | Get all orders                     |
-| GET    | `/api/v1/orders/customer/:customerId` | Get orders belonging to a customer |
-| POST   | `/api/v1/orders`                      | Create an order                    |
-| DELETE | `/api/v1/orders/:id`                  | Delete an order                    |
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| POST | `/api/orders` | Places an order: checks stock, uses database prices, saves the order and lowers stock in one transaction |
+| GET | `/api/orders?ids=1,2,3` | Orders by id (guest order history) |
 
-### Order Items
-
-| Method | Endpoint                       | Description                     |
-| ------ | ------------------------------ | ------------------------------- |
-| GET    | `/api/v1/order-items/:orderId` | Get items belonging to an order |
-| POST   | `/api/v1/order-items`          | Add an item to an order         |
-
-### Vendors
-
-| Method | Endpoint          | Description     |
-| ------ | ----------------- | --------------- |
-| GET    | `/api/v1/vendors` | Get all vendors |
-
-### Supplies
-
-| Method | Endpoint                                | Description                        |
-| ------ | --------------------------------------- | ---------------------------------- |
-| GET    | `/api/v1/supplies/vendor/:vendorId`     | Get supplies belonging to a vendor |
-| PUT    | `/api/v1/supplies/:vendorId/:productId` | Update supply stock quantity       |
-
-## API Examples
-
-### Get All Customers
+Example order:
 
 ```http
-GET /api/v1/customers
-```
-
-### Get a Customer
-
-```http
-GET /api/v1/customers/C101
-```
-
-### Create a Customer
-
-```http
-POST /api/v1/customers
+POST /api/orders
 Content-Type: application/json
 ```
 
 ```json
 {
-  "customer_id": "C106",
-  "customer_name": "Frank Miller",
-  "city": "Austin",
-  "membership_level": "Silver"
+  "items": [{ "productId": 1, "quantity": 2 }],
+  "shippingAddress": {
+    "fullName": "Juan dela Cruz",
+    "phone": "09171234567",
+    "street": "123 Rizal St",
+    "city": "Iloilo City",
+    "province": "Iloilo",
+    "postalCode": "5000"
+  },
+  "paymentMethod": "cod"
 }
 ```
 
-### Update a Customer
+### Users
 
-```http
-PUT /api/v1/customers/C106
-Content-Type: application/json
-```
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| POST | `/api/users/register` | Creates an account; the password is hashed with bcrypt |
+| POST | `/api/users/login` | Checks email and password |
 
-```json
-{
-  "city": "Seattle",
-  "membership_level": "Gold"
-}
-```
+### Cart
 
-### Create a Product
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| GET | `/api/cart/:userId` | A user's cart |
+| POST | `/api/cart` | Adds an item, or increases its quantity if it's already there |
+| PUT | `/api/cart/:id` | Sets an item's quantity; 0 or less removes it |
+| DELETE | `/api/cart/:id` | Removes an item |
 
-```http
-POST /api/v1/products
-Content-Type: application/json
-```
+### Payment server
 
-```json
-{
-  "product_id": "P006",
-  "product_name": "Mechanical Keyboard",
-  "category": "Electronics",
-  "unit_price": 120.00
-}
-```
+Base URL: `http://localhost:4000`
 
-### Update Product Price
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| POST | `/api/invoices` | Creates a Xendit invoice and returns its payment URL |
+| GET | `/api/invoices/:id` | Invoice status (PENDING, PAID, SETTLED, EXPIRED) |
+| POST | `/webhooks/xendit` | Receives Xendit payment callbacks |
 
-```http
-PATCH /api/v1/products/P006/price
-Content-Type: application/json
-```
+### Responses
 
-```json
-{
-  "unit_price": 99.99
-}
-```
+| Code | Meaning |
+| --- | --- |
+| 200 / 201 | Success / created |
+| 400 | Invalid input, with a message saying which field |
+| 401 | Wrong email or password |
+| 404 | Product, order or cart item not found |
+| 409 | Not enough stock, or email already registered |
+| 500 | Unexpected server error |
 
-## Database Queries
+## Database
 
-The API uses raw SQL queries through the PostgreSQL `pg` library.
+Defined in `backend/prisma/schema.prisma`:
 
-All queries use **parameterized values** to help prevent SQL injection.
+- **User**: email, bcrypt password hash, admin flag
+- **Product**: name, category, price (`Decimal(10,2)`), image, stock
+- **CartItem**: a user's product and quantity, one row per user and product
+- **orders**: status, shipping address, payment method
+- **order_items**: product, quantity and `unit_price` copied at checkout, so past orders keep the price paid
 
-Example:
+## Troubleshooting
 
-```typescript
-const result = await pool.query(
-  "SELECT * FROM customer WHERE customer_id = $1",
-  [req.params.id]
-);
-```
+- **"Couldn't load products"** in the store: the API isn't running. Start `npm run dev` in `backend/`.
+- **"Failed to fetch"** at card or GCash checkout: the payment server isn't running. Start `npm start` in `server/`.
+- **Xendit rejects the invoice**: check `XENDIT_SECRET_KEY` is a secret key, not the public one, and that Cards and GCash are enabled in test mode. Restart the payment server after changing `.env`.
+- **`EPERM: operation not permitted, rename ... query_engine-windows.dll.node`** during `prisma generate`: a running Node process has the file open. Stop `npm run dev`, then run it again.
+- **Prisma offers to reset the database**: don't accept, it deletes your data. Run `npm run prisma:status` and check the migration history first.
 
-No ORM or query builder is used.
+## Team
 
-The project also avoids multi-table `JOIN` queries as required by the activity specifications.
-
-## Error Handling
-
-The API uses `try/catch` blocks to handle database and request errors.
-
-Common responses include:
-
-* `200 OK` — Request completed successfully
-* `201 Created` — Resource was successfully created
-* `204 No Content` — Resource was successfully deleted without a response body
-* `400 Bad Request` — Invalid request or database constraint violation
-* `404 Not Found` — Requested resource does not exist
-* `500 Internal Server Error` — Unexpected server or database error
-
-## Testing
-
-The API can be tested using tools such as:
-
-* Postman
-* Thunder Client
-* Insomnia
-* `curl`
-
-Example:
-
-```bash
-curl http://localhost:3000/api/v1/customers
-```
-
-## Author
-
-**Niño Kriebel C. Olmo**
-
+- Mark Angelo L. Florencio
+- Niño Kriebel C. Olmo
+- Nikko T. Delos Santos

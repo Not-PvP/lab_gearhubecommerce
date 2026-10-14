@@ -6,8 +6,10 @@
   "scripts": {
     "dev": "nodemon --exec ts-node src/server.ts",
     "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev --name init",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prisma:migrate": "prisma migrate dev",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prisma:status": "prisma migrate status",
+    "prisma:baseline": "prisma migrate resolve --applied 20261014033405_init"
   },
   "keywords": [],
   "author": "",

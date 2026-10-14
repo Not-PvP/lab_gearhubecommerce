@@ -1,3 +1,3 @@
-import { PrismaClient } from '@prisma/client';
-
-export const pool = new PrismaClient();
+// Kept for backwards compatibility: reuse the single shared Prisma client
+// instead of opening a second connection pool.
+export { prisma as pool } from './prisma';

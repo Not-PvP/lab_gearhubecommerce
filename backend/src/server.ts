@@ -1,11 +1,9 @@
+import 'dotenv/config';
 import express, { Request, Response } from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import bcrypt from 'bcrypt';
 import { Prisma } from '@prisma/client';
 import { prisma } from './prisma';
-
-dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -40,13 +38,13 @@ const serializeProduct = (product: {
   stock_quantity: product.stockQuantity,
 });
 
-const serializeUser = (user: { id: number; email: string; isAdmin: boolean }) => ({
+const serializeUser = (user: { id: number; email: string; isAdmin: boolean | null }) => ({
   id: user.id,
   email: user.email,
   is_admin: user.isAdmin,
 });
 
-const serializeCartItem = (item: { id: number; userId: number; productId: number; quantity: number }) => ({
+const serializeCartItem = (item: { id: number; userId: number | null; productId: number | null; quantity: number }) => ({
   id: item.id,
   user_id: item.userId,
   product_id: item.productId,
@@ -159,10 +157,10 @@ app.get('/api/cart/:userId', async (req: Request, res: Response) => {
         id: item.id,
         quantity: item.quantity,
         product_id: item.productId,
-        name: item.product.name,
-        price: Number(item.product.price),
-        image_url: item.product.imageUrl,
-        stock_quantity: item.product.stockQuantity,
+        name: item.product?.name ?? null,
+        price: item.product ? Number(item.product.price) : null,
+        image_url: item.product?.imageUrl ?? null,
+        stock_quantity: item.product?.stockQuantity ?? null,
       }))
     );
   } catch (error) {

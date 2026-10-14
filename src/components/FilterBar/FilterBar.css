@@ -7,27 +7,27 @@
   border-radius: 12px;
   padding: 10px 16px;
   position: relative;
-  font-family: "Poppins", sans-serif;
+  font-family: var(--font);
 }
 
 .filter-button {
   display: flex;
   align-items: center;
   gap: 8px;
-  border: 1.5px solid #111111;
-  background: #bf1b2c;
+  border: 1.5px solid var(--surface-1);
+  background: var(--red);
   border-radius: 8px;
   padding: 7px 14px;
   font-size: 13px;
   font-weight: 500;
-  font-family: "Poppins", sans-serif;
-  color: #fff;
+  font-family: var(--font);
+  color: var(--text);
   cursor: pointer;
   transition: background 0.2s ease, transform 0.2s ease, box-shadow .2s ease;
 }
 
 .filter-button:hover {
-  background: #A41624;
+  background: var(--red-hover);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(191, 27, 44, .25);
 }
@@ -47,20 +47,20 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  border: 1px solid #2A2A2A;
-  background: #111111;
+  border: 1px solid var(--border);
+  background: var(--surface-1);
   border-radius: 8px;
   padding: 7px 14px;
   font-size: 13px;
   font-weight: 500;
-  font-family: "Poppins", sans-serif;
-  color: #ffffff;
+  font-family: var(--font);
+  color: var(--text);
   cursor: pointer;
   transition: background .2s ease, transform .2s ease
 }
 
 .sort-button:hover {
-  background: #1A1A1A;
+  background: var(--surface-2);
   transform: translateY(-1px);
 }
 
@@ -84,8 +84,8 @@
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
-  background: #111111;
-  border: 1px solid #2A2A2A;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
   border-radius: 12px;
   min-width: 180px;
   overflow: hidden;
@@ -113,35 +113,35 @@
   background: transparent;
   padding: 10px 14px;
   font-size: 13px;
-  font-family: "Poppins", sans-serif;
-  color: #ffffff;
+  font-family: var(--font);
+  color: var(--text);
   cursor: pointer;
 }
 
 .sort-menu-item:hover {
-  background: #1E1E1E;
+  background: var(--surface-3);
 }
 
 .sort-menu-item-active {
-  background: #BF1B2C;
-  color: #ffffff;
+  background: var(--red);
+  color: var(--text);
 }
 
 .sort-menu-item-active:hover {
-  background: #A41624;
+  background: var(--red-hover);
 }
 
 .filter-panel {
   position: absolute;
   top: calc(100% + 8px);
   left: 0;
-  background: #000;
-  border: 1px solid #2a2a2a;
+  background: var(--surface-0);
+  border: 1px solid var(--border);
   border-radius: 12px;
   padding: 20px;
   width: 260px;
   z-index: 5;
-  font-family: "Poppins", sans-serif;
+  font-family: var(--font);
   box-shadow: 0 10px 30px rgba(0,0,0,.35);
   animation: menuIn .18s ease;
 }
@@ -164,7 +164,7 @@
 .filter-panel-label {
   font-size: 12px;
   font-weight: 600;
-  color: #fff;
+  color: var(--text);
   margin: 0 0 8px;
 }
 
@@ -179,10 +179,10 @@
 
   background: linear-gradient(
     to right,
-    #BF1B2C 0%,
-    #BF1B2C var(--progress, 50%),
-    #2A2A2A var(--progress, 50%),
-    #2A2A2A 100%
+    var(--red) 0%,
+    var(--red) var(--progress, 50%),
+    var(--border) var(--progress, 50%),
+    var(--border) 100%
   );
 }
 
@@ -194,8 +194,8 @@
   height: 18px;
   border-radius: 50%;
 
-  background: #BF1B2C;
-  border: 2px solid #ffffff;
+  background: var(--red);
+  border: 2px solid var(--text);
 
   cursor: pointer;
   transition: transform .2s ease, box-shadow .2s ease;
@@ -208,7 +208,7 @@
 
 .filter-panel-value {
   font-size: 12px;
-  color: #a3a3a3;
+  color: var(--text-muted);
   margin: 6px 0 0;
 }
 
@@ -216,29 +216,29 @@
   display: flex;
   justify-content: flex-end;
   gap: 8px;
-  border-top: 1px solid #2A2A2A;
+  border-top: 1px solid var(--border);
   padding-top: 12px;
 }
 
 .filter-panel-clear {
-  border: 1px solid #555;
+  border: 1px solid var(--border-strong);
   background: transparent;
-  color: #fff;
+  color: var(--text);
   border-radius: 8px;
   padding: 6px 12px;
   font-size: 12px;
-  font-family: "Poppins", sans-serif;
+  font-family: var(--font);
   cursor: pointer;
 }
 
 .filter-panel-apply {
   border: none;
-  background: #bf1b2c;
-  color: #ffffff;
+  background: var(--red);
+  color: var(--text);
   border-radius: 8px;
   padding: 6px 14px;
   font-size: 12px;
-  font-family: "Poppins", sans-serif;
+  font-family: var(--font);
   cursor: pointer;
 }
 
@@ -252,14 +252,14 @@
 }
 
 .filter-panel-clear:hover {
-  background: #1A1A1A;
-  border-color: #777;
+  background: var(--surface-2);
+  border-color: var(--text-subtle);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(191, 27, 44, .25);
 }
 
 .filter-panel-apply:hover {
-  background: #A41624;
+  background: var(--red-hover);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(191, 27, 44, .25);
 }

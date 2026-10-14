@@ -15,12 +15,11 @@ export interface CreateInvoiceResult {
 export async function createInvoice(
   lineItems: InvoiceLineItem[],
   referenceNumber: string,
-  paymentMethods: ("CREDIT_CARD" | "GCASH")[],
 ): Promise<CreateInvoiceResult> {
   const response = await fetch(`${API_BASE_URL}/api/invoices`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ lineItems, referenceNumber, paymentMethods }),
+    body: JSON.stringify({ lineItems, referenceNumber }),
   });
 
   if (!response.ok) {

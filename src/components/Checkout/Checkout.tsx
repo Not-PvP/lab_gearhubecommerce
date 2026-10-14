@@ -214,7 +214,6 @@ function Checkout() {
             : []),
         ],
         orderId,
-        [paymentMethod === "gcash" ? "GCASH" : "CREDIT_CARD"],
       );
 
       if (popup.closed) {
@@ -305,8 +304,8 @@ function Checkout() {
           <div className="checkout-confirmation">
             <p className="checkout-confirmation__spinner" aria-hidden="true" />
             <p className="checkout-confirmation__text">
-              Complete your {paymentMethod === "gcash" ? "GCash" : "card"} payment
-              in the window that opened.
+              Choose how to pay and finish your payment in the Xendit window
+              that opened.
             </p>
             <p className="checkout-confirmation__status">
               Waiting for confirmation&hellip;
@@ -454,12 +453,11 @@ function Checkout() {
 
               <fieldset className="checkout-section">
                 <legend className="checkout-section__title">Payment</legend>
-                <div className="checkout-pay">
+                <div className="checkout-pay" role="radiogroup" aria-label="Payment method">
                   {(
                     [
-                      { id: "cod", label: "COD", hint: "Cash on delivery" },
-                      { id: "card", label: "Card", hint: "Visa, Mastercard" },
-                      { id: "gcash", label: "GCash", hint: "E-wallet" },
+                      { id: "cod", label: "Cash on delivery", hint: "Pay the courier when it arrives" },
+                      { id: "xendit", label: "Online payment", hint: "Card, GCash, Maya, banks, 7-Eleven & more" },
                     ] as { id: PaymentMethod; label: string; hint: string }[]
                   ).map((option) => (
                     <label
@@ -478,10 +476,11 @@ function Checkout() {
                     </label>
                   ))}
                 </div>
+
                 <p className="checkout-section__note">
                   {paymentMethod === "cod"
                     ? "Our courier collects payment when your order is delivered."
-                    : "You'll finish paying in a secure Xendit window. Test mode: no real money is charged."}
+                    : "A secure Xendit window opens where you choose card, e-wallet, online banking or over-the-counter. Test mode: no real money is charged."}
                 </p>
               </fieldset>
             </div>
@@ -533,7 +532,11 @@ function Checkout() {
                 {paymentMethod === "cod" ? "Place order" : "Continue to payment"}
               </button>
               {!isAddressComplete && (
-                <p className="checkout-summary__hint">Fill in your shipping address to continue.</p>
+                <p className="checkout-summary__hint">
+                  {paymentMethod === "cod"
+                    ? "Fill in your delivery details to place your order."
+                    : "Fill in your delivery details to continue to payment."}
+                </p>
               )}
             </aside>
 

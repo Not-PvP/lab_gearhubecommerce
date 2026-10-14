@@ -1,5 +1,6 @@
 import React from "react";
 import { useCard } from "../../state/CardContext";
+import { getPaymentLabel } from "../../utils/paymentMethods";
 import "./OrderHistory.css";
 
 const OrderHistory: React.FC = () => {
@@ -72,7 +73,7 @@ const OrderHistory: React.FC = () => {
 
                 <div className="order-history__bottom">
                   <span>
-                    Payment: {order.paymentMethod.toUpperCase()}
+                    Payment: {getPaymentLabel(order.paymentMethod)}
                   </span>
                   <strong>₱{order.total.toLocaleString()}</strong>
                 </div>

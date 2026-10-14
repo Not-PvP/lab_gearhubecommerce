@@ -27,16 +27,13 @@ app.use(express.json());
 
 app.post("/api/invoices", async (req, res) => {
   try {
-    const { lineItems, referenceNumber, paymentMethods } = req.body || {};
+    const { lineItems, referenceNumber } = req.body || {};
 
     if (!Array.isArray(lineItems) || lineItems.length === 0) {
       return res.status(400).json({ error: "lineItems is required" });
     }
     if (!referenceNumber) {
       return res.status(400).json({ error: "referenceNumber is required" });
-    }
-    if (!Array.isArray(paymentMethods) || paymentMethods.length === 0) {
-      return res.status(400).json({ error: "paymentMethods is required" });
     }
 
     const amount = lineItems.reduce(
@@ -54,7 +51,8 @@ app.post("/api/invoices", async (req, res) => {
         external_id: referenceNumber,
         amount,
         currency: "PHP",
-        payment_methods: paymentMethods,
+        // no payment_methods: Xendit's page lists every channel activated in
+        // the dashboard, grouped into cards, e-wallets, banks, retail, etc.
         items: lineItems.map((item) => ({
           name: item.name,
           quantity: item.quantity,
@@ -74,6 +72,17 @@ app.post("/api/invoices", async (req, res) => {
         error: json?.message || json?.error_code || "Xendit request failed",
       });
     }
+
+    // Diagnostic: shows which channels Xendit enabled on this invoice.
+    console.log("[gearhub-server] Invoice", json.id, "enabled by Xendit:", {
+      ewallets: (json.available_ewallets || []).map((c) => c.ewallet_type),
+      banks: (json.available_banks || []).map((c) => c.bank_code),
+      retail: (json.available_retail_outlets || []).map((c) => c.retail_outlet_name),
+      directDebits: (json.available_direct_debits || []).map((c) => c.direct_debit_type),
+      paylaters: (json.available_paylaters || []).map((c) => c.paylater_type),
+      qr: (json.available_qr_codes || []).map((c) => c.qr_code_type),
+      cards: json.should_exclude_credit_card ? "excluded" : "allowed",
+    });
 
     res.json({ id: json.id, invoiceUrl: json.invoice_url });
   } catch (err) {

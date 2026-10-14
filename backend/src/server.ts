@@ -289,7 +289,9 @@ app.delete('/api/cart/:id', async (req: Request, res: Response) => {
 // ---------- Orders ----------
 
 const SHIPPING_FEE = 150;
-const PAYMENT_METHODS = ['cod', 'card', 'gcash'] as const;
+// 'xendit' = paid online through Xendit's hosted checkout.
+// 'card' and 'gcash' stay valid so orders saved before this change still load.
+const PAYMENT_METHODS = ['cod', 'xendit', 'card', 'gcash'] as const;
 const ADDRESS_FIELDS = ['fullName', 'street', 'city', 'province', 'postalCode', 'phone'] as const;
 
 type ShippingAddress = Record<(typeof ADDRESS_FIELDS)[number], string>;

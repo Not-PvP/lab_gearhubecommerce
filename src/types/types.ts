@@ -1,3 +1,5 @@
+import { CheckoutPaymentMethod } from "../utils/paymentMethods";
+
 export interface Product {
   id: string;
   name: string;
@@ -28,7 +30,10 @@ export interface ShippingAddress {
   phone: string;
 }
 
-export type PaymentMethod = "cod" | "card" | "gcash";
+export type PaymentMethod = CheckoutPaymentMethod;
+
+// what saved orders can hold, including methods from before checkout changed
+export type StoredPaymentMethod = CheckoutPaymentMethod | "card" | "gcash";
 
 export interface OrderItem {
   id: string;
@@ -52,7 +57,7 @@ export interface Order {
   shipping: number;
   total: number;
   shippingAddress: ShippingAddress;
-  paymentMethod: PaymentMethod;
+  paymentMethod: StoredPaymentMethod;
   status: OrderStatus;
   createdAt: string;
 }

@@ -25,9 +25,10 @@ const Navbar: React.FC = () => {
 
       <div className="navbar-search-wrap">
         <div className="navbar-search-bar">
-          <img src="/images/search.svg" alt="search" className="navbar-search-icon" />
+          <img src="/images/search.svg" alt="" aria-hidden="true" className="navbar-search-icon" />
           <input
-            type="text"
+            type="search"
+            aria-label="Search products"
             placeholder="Search for gears"
             value={state.filters.searchQuery}
             onChange={(e) => dispatch({ type: "SET_SEARCH_QUERY", payload: e.target.value })}
@@ -37,15 +38,17 @@ const Navbar: React.FC = () => {
 
       <div className="navbar-actions">
         <button className="navbar-icon-btn"
-          onClick={() => dispatch({ type: "TOGGLE_ORDER_HISTORY" })}>
-          <img src="/images/user.svg" alt="user" className="navbar-user-icon" />
+          onClick={() => dispatch({ type: "TOGGLE_ORDER_HISTORY" })}
+          aria-label="Order history">
+          <img src="/images/user.svg" alt="" aria-hidden="true" className="navbar-user-icon" />
         </button>
 
         <button
           className="navbar-icon-btn"
           onClick={() => dispatch({ type: "TOGGLE_CART" })}
+          aria-label={itemCount > 0 ? `Cart, ${itemCount} item${itemCount === 1 ? "" : "s"}` : "Cart"}
         >
-          <img src="/images/cart.svg" alt="cart" className="navbar-cart-icon" />
+          <img src="/images/cart.svg" alt="" aria-hidden="true" className="navbar-cart-icon" />
           {itemCount > 0 && (
             <span className="navbar-cart-badge">{itemCount}</span>
           )}

@@ -9,10 +9,8 @@
   transition: 
     box-shadow .25s ease, 
     transform .25s ease,
-    border-color .25s ease,
-    filter.25s ease;
+    border-color .25s ease;
   font-family: var(--font);
-  filter: brightness(0.95)
 }
 
 .product-card:hover {
@@ -21,7 +19,6 @@
   box-shadow:
   0 12px 28px rgba(0,0,0,.18),
   0 0 0 1px rgba(191,27,44,.35);
-  filter: brightness(1.30)
 }
 
 .product-card:hover .product-card__image {
@@ -29,7 +26,7 @@
 }
 
 .product-card:hover .product-card__name {
-  color: var(--red);
+  color: var(--red-text);
 }
 
 .product-card__image-wrap {
@@ -57,22 +54,18 @@
 .product-card__name {
   font-size: 15px;
   font-weight: 600;
-  margin: 0 0 4px;
+  margin: 0 0 8px;
   color: var(--text);
   line-height: 1.3;
   transition: color .2s ease;
 }
 
-.product-card__category {
-  font-size: 12px;
-  color: var(--text-subtle);
-  margin-bottom: 8px;
-}
+
 
 .product-card__price {
   font-size: 15px;
   font-weight: 700;
-  color: var(--red);
+  color: var(--red-text);
   margin: 0 0 4px;
 }
 
@@ -86,7 +79,7 @@
 }
 
 .product-card__stock--out {
-  color: var(--red);
+  color: var(--red-text);
 }
 
 .product-card__button {

@@ -203,7 +203,7 @@
 
 .cart-item__price {
   font-size: 13px;
-  color: var(--red);
+  color: var(--red-text);
   margin: 0 0 8px;
 }
 
@@ -319,7 +319,7 @@
 }
 
 .cart-stock-warning {
-  color: var(--red);
+  color: var(--red-text);
   font-size: 12px;
   margin-top: 4px;
 }

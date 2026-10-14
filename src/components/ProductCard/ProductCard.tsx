@@ -16,7 +16,7 @@ interface ProductCardProps {
 
 function ProductCard({ product }: ProductCardProps) {
   const { dispatch } = useCard();
-  const { name, category, price, image, stock } = product;
+  const { name, price, image, stock } = product;
 
   const handleAddToCart = () => {
     dispatch({ type: "ADD_TO_CART", payload: product });
@@ -25,20 +25,19 @@ function ProductCard({ product }: ProductCardProps) {
   return (
     <div className="product-card">
       <div className="product-card__image-wrap">
-        <img src={image} alt={name} className="product-card__image" />
+        <img src={image} alt={name} className="product-card__image" loading="lazy" />
       </div>
 
       <div className="product-card__body">
         <h3 className="product-card__name">{name}</h3>
-        <p className="product-card__category">{category}</p>
         <p className="product-card__price">₱{price.toLocaleString()}</p>
-        <p
-          className={`product-card__stock ${
-            stock > 0 ? "product-card__stock--in" : "product-card__stock--out"
-          }`}
-        >
-          {stock > 5 ? "In Stock" : stock > 0 ? `Only ${stock} left` : "Out of Stock"}
-        </p>
+        {stock > 0 && (
+          <p
+            className="product-card__stock product-card__stock--in"
+          >
+            {stock > 5 ? "In Stock" : `Only ${stock} left`}
+          </p>
+        )}
       </div>
 
       <button
@@ -46,7 +45,7 @@ function ProductCard({ product }: ProductCardProps) {
         disabled={stock === 0}
         onClick={handleAddToCart}
       >
-        Add to Cart
+        {stock === 0 ? "Out of Stock" : "Add to Cart"}
       </button>
     </div>
   );

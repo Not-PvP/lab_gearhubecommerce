@@ -131,6 +131,7 @@
 }
 
 .hero-dot {
+  position: relative;
   width: 8px;
   height: 8px;
   border-radius: 50%;
@@ -167,11 +168,31 @@
   .hero-slide {
     height: 220px;
   }
+  /* the banner art already carries the headline; the overlay card covers it on small screens */
   .hero-slide-content {
-    max-width: 220px;
-    padding: 10px 14px;
+    display: none;
   }
-  .hero-headline {
-    font-size: 15px;
+  .hero-arrow {
+    width: 32px;
+    height: 32px;
   }
+  .hero-arrow-left {
+    left: 10px;
+  }
+  .hero-arrow-right {
+    right: 10px;
+  }
+}
+
+.hero-arrow:focus-visible,
+.hero-dot:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
+}
+
+/* invisible 24px hit area so the small dots are easy to tap */
+.hero-dot::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
 }

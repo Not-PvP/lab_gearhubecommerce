@@ -14,6 +14,7 @@ const FilterBar: React.FC = () => {
   const [isSortOpen, setIsSortOpen] = useState(false);
 
   const sortBy = state.filters.sortBy;
+  const isPriceFiltered = state.filters.maxPrice !== Infinity;
 
   const handleSortSelect = (value: string) => {
     dispatch({
@@ -36,17 +37,19 @@ const FilterBar: React.FC = () => {
   return (
     <div className="filter-bar">
       <button
-        className="filter-button"
+        className={`filter-button ${isPriceFiltered ? "filter-button--active" : ""}`}
         onClick={() => setIsFilterOpen((prev) => !prev)}
+        aria-expanded={isFilterOpen}
       >
         <img src="/images/filter.svg" alt="" aria-hidden="true" />
-        Filter
+        {isPriceFiltered ? "Filter (1)" : "Filter"}
       </button>
 
       <div className="sort-wrap">
         <button
           className="sort-button"
           onClick={() => setIsSortOpen((prev) => !prev)}
+          aria-expanded={isSortOpen}
         >
           Sort: {currentSortLabel}
           <img

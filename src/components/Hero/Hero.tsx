@@ -24,8 +24,8 @@ const Hero: React.FC = () => {
 
   return (
     <section className="hero">
-      <button className="hero-arrow hero-arrow-left" onClick={goPrev}>
-        <img src="/images/arrow-left.svg" alt="Previous slide" />
+      <button className="hero-arrow hero-arrow-left" onClick={goPrev} aria-label="Previous slide">
+        <img src="/images/arrow-left.svg" alt="" aria-hidden="true" />
       </button>
 
       <div className="hero-track"
@@ -43,8 +43,8 @@ const Hero: React.FC = () => {
         </div>
         ))}
       </div>  
-      <button className="hero-arrow hero-arrow-right" onClick={goNext}>
-        <img src="/images/arrow-right.svg" alt="Next slide" />
+      <button className="hero-arrow hero-arrow-right" onClick={goNext} aria-label="Next slide">
+        <img src="/images/arrow-right.svg" alt="" aria-hidden="true" />
       </button>
 
       <div className="hero-dots">
@@ -53,6 +53,8 @@ const Hero: React.FC = () => {
             key={slide.id}
             className={`hero-dot ${index === current ? "hero-dot-active" : ""}`}
             onClick={() => setCurrent(index)}
+            aria-label={`Go to slide ${index + 1}: ${slide.headline}`}
+            aria-current={index === current ? "true" : undefined}
           />
         ))}
       </div>

@@ -5,6 +5,7 @@
 :root {
   --red: #bf1b2c;
   --red-hover: #a41624;
+  --red-text: #e5414f;    /* red for small text on dark: passes 4.5:1 */
 
   --surface-0: #000000;   /* cards, navbar */
   --surface-1: #111111;   /* drawers, menus, inputs */

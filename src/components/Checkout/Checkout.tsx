@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useCard } from "../../state/CardContext";
 import { OrderStatus, PaymentMethod, ShippingAddress } from "../../types/types";
 import { createInvoice, getInvoiceStatus } from "../../utils/xenditClient";
+import { PROVINCES, REGION_VI } from "../../utils/locations";
 import "./Checkout.css";
 
 const EMPTY_ADDRESS: ShippingAddress = {
@@ -233,9 +234,14 @@ function Checkout() {
   return (
     <>
       <div className="checkout-overlay" onClick={stage === "form" ? onClose : undefined} />
-      <div className="checkout-modal" role="dialog" aria-modal="true">
+      <div
+        className={`checkout-modal ${stage === "form" ? "checkout-modal--wide" : ""}`}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="checkout-title"
+      >
         <div className="checkout-modal__header">
-          <h2 className="checkout-modal__title">
+          <h2 className="checkout-modal__title" id="checkout-title">
             {stage === "confirmed"
               ? "Order Confirmed"
               : stage === "awaiting-payment"
@@ -246,7 +252,7 @@ function Checkout() {
                     ? "Something Went Wrong"
                     : "Checkout"}
           </h2>
-          <button className="checkout-modal__close" onClick={onClose}>
+          <button className="checkout-modal__close" onClick={onClose} aria-label="Close checkout">
             ✕
           </button>
         </div>
@@ -314,109 +320,209 @@ function Checkout() {
 
         {stage === "form" && (
           <form className="checkout-form" onSubmit={onPlaceOrder}>
-            <div className="checkout-order-summary">
-              {selectedItems.map((item) => (
-                <div className="checkout-order-summary__row" key={item.id}>
-                  <span>
-                    {item.name} × {item.quantity}
-                  </span>
-                  <span>₱{(item.price * item.quantity).toLocaleString()}</span>
+            <div className="checkout-form__details">
+              <fieldset className="checkout-section">
+                <legend className="checkout-section__title">Shipping address</legend>
+                <div className="checkout-fields">
+                  <label className="checkout-field checkout-field--half">
+                    <span className="checkout-field__label">Full name</span>
+                    <input
+                      className="checkout-field__input"
+                      placeholder="Juan dela Cruz"
+                      autoComplete="name"
+                      value={address.fullName}
+                      onChange={onChangeField("fullName")}
+                      required
+                    />
+                  </label>
+                  <label className="checkout-field checkout-field--half">
+                    <span className="checkout-field__label">Mobile number</span>
+                    <span className="checkout-phone">
+                      <span className="checkout-phone__prefix" aria-hidden="true">09</span>
+                      <input
+                        className="checkout-field__input checkout-phone__input"
+                        placeholder="123 456 789"
+                        inputMode="numeric"
+                        autoComplete="tel-national"
+                        aria-label="Mobile number, after 09"
+                        value={address.phone.slice(2)}
+                        onChange={(e) => {
+                          const digits = e.target.value.replace(/\D/g, "").slice(0, 9);
+                          setAddress((prev) => ({ ...prev, phone: `09${digits}` }));
+                        }}
+                        required
+                      />
+                    </span>
+                  </label>
+                  <label className="checkout-field checkout-field--full">
+                    <span className="checkout-field__label">Street address</span>
+                    <input
+                      className="checkout-field__input"
+                      placeholder="House no., street, barangay"
+                      autoComplete="street-address"
+                      value={address.street}
+                      onChange={onChangeField("street")}
+                      required
+                    />
+                  </label>
+                  <label className="checkout-field">
+                    <span className="checkout-field__label">Province</span>
+                    <select
+                      className="checkout-field__input checkout-field__select"
+                      autoComplete="address-level1"
+                      value={address.province}
+                      onChange={(e) =>
+                        // a new province invalidates the chosen city
+                        setAddress((prev) => ({ ...prev, province: e.target.value, city: "" }))
+                      }
+                      required
+                    >
+                      <option value="" disabled>
+                        Select province
+                      </option>
+                      {PROVINCES.map((province) => (
+                        <option key={province} value={province}>
+                          {province}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="checkout-field">
+                    <span className="checkout-field__label">City / municipality</span>
+                    <select
+                      className="checkout-field__input checkout-field__select"
+                      autoComplete="address-level2"
+                      value={address.city}
+                      onChange={(e) => setAddress((prev) => ({ ...prev, city: e.target.value }))}
+                      disabled={!address.province}
+                      required
+                    >
+                      <option value="" disabled>
+                        Select city
+                      </option>
+                      {(REGION_VI[address.province] ?? []).map((city) => (
+                        <option key={city} value={city}>
+                          {city}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="checkout-field checkout-field--postal">
+                    <span className="checkout-field__label">Postal code</span>
+                    <input
+                      className="checkout-field__input"
+                      placeholder="5000"
+                      inputMode="numeric"
+                      autoComplete="postal-code"
+                      pattern="[0-9]{4}"
+                      title="Enter a valid 4-digit postal code."
+                      value={address.postalCode}
+                      onChange={onChangeField("postalCode")}
+                      required
+                    />
+                  </label>
                 </div>
-              ))}
-              <div className="checkout-order-summary__row">
-                <span>Shipping</span>
-                <span>₱{shipping.toLocaleString()}</span>
-              </div>
-              <div className="checkout-order-summary__row checkout-order-summary__row--total">
-                <span>Total</span>
-                <span>₱{total.toLocaleString()}</span>
-              </div>
+              </fieldset>
+
+              <fieldset className="checkout-section">
+                <legend className="checkout-section__title">Payment</legend>
+                <div className="checkout-pay">
+                  {(
+                    [
+                      { id: "cod", label: "COD", hint: "Cash on delivery" },
+                      { id: "card", label: "Card", hint: "Visa, Mastercard" },
+                      { id: "gcash", label: "GCash", hint: "E-wallet" },
+                    ] as { id: PaymentMethod; label: string; hint: string }[]
+                  ).map((option) => (
+                    <label
+                      className={`checkout-pay__option ${paymentMethod === option.id ? "is-selected" : ""}`}
+                      key={option.id}
+                    >
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        className="checkout-pay__radio"
+                        checked={paymentMethod === option.id}
+                        onChange={() => setPaymentMethod(option.id)}
+                      />
+                      <span className="checkout-pay__label">{option.label}</span>
+                      <span className="checkout-pay__hint">{option.hint}</span>
+                    </label>
+                  ))}
+                </div>
+                <p className="checkout-section__note">
+                  {paymentMethod === "cod"
+                    ? "Our courier collects payment when your order is delivered."
+                    : "You'll finish paying in a secure Xendit window. Test mode: no real money is charged."}
+                </p>
+              </fieldset>
             </div>
 
-            <h3 className="checkout-form__section-title">Shipping Address</h3>
-            <div className="checkout-form__grid">
-              <input
-                className="checkout-form__input"
-                placeholder="Full Name"
-                value={address.fullName}
-                onChange={onChangeField("fullName")}
-                required
-              />
-              <div className="checkout-phone-input">
-                <span className="checkout-phone-prefix">09</span>
-                <input
-                  className="checkout-form__input"
-                  placeholder="123456789"
-                  value={address.phone.slice(2)}
-                  onChange={(e) => {
-                    const digits = e.target.value.replace(/\D/g, "").slice(0, 9);
-                    setAddress((prev) => ({ ...prev, phone: `09${digits}` }));
-                  }}
-                  required
-                />
-              </div>
-              <input
-                className="checkout-form__input checkout-form__input--full"
-                placeholder="Street Address"
-                value={address.street}
-                onChange={onChangeField("street")}
-                required
-              />
-              <input
-                className="checkout-form__input"
-                placeholder="City"
-                value={address.city}
-                onChange={onChangeField("city")}
-                required
-              />
-              <input
-                className="checkout-form__input"
-                placeholder="Province"
-                value={address.province}
-                onChange={onChangeField("province")}
-                required
-              />
-              <input
-                className="checkout-form__input"
-                placeholder="Postal Code"
-                pattern="[0-9]{4}"
-                title="Enter a valid 4-digit postal code."
-                value={address.postalCode}
-                onChange={onChangeField("postalCode")}
-                required
-              />
-            </div>
+            <aside className="checkout-summary" aria-label="Order summary">
+              <h3 className="checkout-summary__title">
+                Your order
+                <span className="checkout-summary__count">
+                  {selectedItems.reduce((n, item) => n + item.quantity, 0)} item
+                  {selectedItems.reduce((n, item) => n + item.quantity, 0) === 1 ? "" : "s"}
+                </span>
+              </h3>
 
-            <h3 className="checkout-form__section-title">Payment Method</h3>
-            <div className="checkout-payment-options">
-              {(
-                [
-                  { id: "cod", label: "Cash on Delivery" },
-                  { id: "card", label: "Card via Xendit (Test Mode)" },
-                  { id: "gcash", label: "GCash via Xendit (Test Mode)" },
-                ] as { id: PaymentMethod; label: string }[]
-              ).map((option) => (
-                <label className="checkout-payment-option" key={option.id}>
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    checked={paymentMethod === option.id}
-                    onChange={() => setPaymentMethod(option.id)}
-                  />
-                  {option.label}
-                </label>
-              ))}
-            </div>
+              <ul className="checkout-summary__items">
+                {selectedItems.map((item) => (
+                  <li className="checkout-summary__item" key={item.id}>
+                    <img className="checkout-summary__thumb" src={item.image} alt="" />
+                    <span className="checkout-summary__name">
+                      <span className="checkout-summary__name-text">{item.name}</span>
+                      <span className="checkout-summary__qty">Qty {item.quantity}</span>
+                    </span>
+                    <span className="checkout-summary__price">
+                      ₱{(item.price * item.quantity).toLocaleString()}
+                    </span>
+                  </li>
+                ))}
+              </ul>
 
-            <button
-              type="submit"
-              className="checkout-modal__submit"
-              disabled={!isAddressComplete || selectedItems.length === 0}
-            >
-              {paymentMethod === "cod"
-                ? `Place Order — ₱${total.toLocaleString()}`
-                : `Pay ₱${total.toLocaleString()} with Xendit`}
-            </button>
+              <dl className="checkout-summary__totals">
+                <div>
+                  <dt>Subtotal</dt>
+                  <dd>₱{subtotal.toLocaleString()}</dd>
+                </div>
+                <div>
+                  <dt>Shipping</dt>
+                  <dd>₱{shipping.toLocaleString()}</dd>
+                </div>
+                <div className="checkout-summary__total">
+                  <dt>Total</dt>
+                  <dd>₱{total.toLocaleString()}</dd>
+                </div>
+              </dl>
+
+              <button
+                type="submit"
+                className="checkout-modal__submit"
+                disabled={!isAddressComplete || selectedItems.length === 0}
+              >
+                {paymentMethod === "cod" ? "Place order" : "Continue to payment"}
+              </button>
+              {!isAddressComplete && (
+                <p className="checkout-summary__hint">Fill in your shipping address to continue.</p>
+              )}
+            </aside>
+
+            {/* phones: total and action stay pinned to the bottom of the sheet */}
+            <div className="checkout-mobile-bar">
+              <span className="checkout-mobile-bar__total">
+                <span className="checkout-mobile-bar__label">Total</span>
+                ₱{total.toLocaleString()}
+              </span>
+              <button
+                type="submit"
+                className="checkout-modal__submit"
+                disabled={!isAddressComplete || selectedItems.length === 0}
+              >
+                {paymentMethod === "cod" ? "Place order" : "Continue to payment"}
+              </button>
+            </div>
           </form>
         )}
       </div>
